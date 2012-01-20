@@ -1,0 +1,24 @@
+{
+  "name": "dynode",
+  "description": "node.js driver for Amazon's DynamoDB",
+  "version": "0.0.1",
+  "author": "Ryan Fitzgerald <ryan@codebrewstudios.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/codebrew/dynode.git"
+  },
+  "keywords": ["dynamoDB", "database", "aws"],
+  "dependencies": {
+    "request": "2.9.x",
+    "utile": "0.0.10"
+  },
+  "devDependencies": {
+    "mocha" : "0.10.x",
+    "should": "0.5.x"
+  },
+  "scripts": {
+    "test"  : "mocha --ui bdd --reporter spec --require should test/*-test.js"
+  },
+  "engines": { "node": ">= 0.4.0" },
+  "main": "./lib/dynode"
+}
