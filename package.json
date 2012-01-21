@@ -10,7 +10,8 @@
   "keywords": ["dynamoDB", "database", "aws"],
   "dependencies": {
     "request": "2.9.x",
-    "utile": "0.0.10"
+    "utile": "0.0.10",
+    "xml2js": "0.1.x"
   },
   "devDependencies": {
     "mocha" : "0.10.x",
