@@ -37,6 +37,18 @@ describe('STS', function() {
 
     });
 
+    it('should throw exception when access key isnt given', function() {
+      var func = function(){ new STS({secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});};
+      
+      should.throws(func);
+    });
+
+    it('should throw exception when secret access key isnt given', function() {
+      var func = function(){ new STS({accessKeyId: process.env.AWS_ACCEESS_KEY_ID});};
+      
+      should.throws(func);
+    });
+
   });
 
 });
