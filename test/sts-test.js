@@ -6,11 +6,9 @@ describe('STS', function() {
 
   describe("with valid access keys", function() {
 
-    beforeEach(function() {
-      sts = new STS({accessKeyId : process.env.AWS_ACCEESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
-    });
-
     it('should get session token', function(done) {
+      sts = new STS({accessKeyId : process.env.AWS_ACCEESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
+
       sts.getSessionToken(function(err, credentials) {
 
         should.exist(credentials.sessionToken);
@@ -26,14 +24,12 @@ describe('STS', function() {
   });
 
   describe("with invalid access keys", function() {
-    beforeEach(function() {
-      sts = new STS({accessKeyId : "asdfasdfasdf", secretAccessKey: "asdf"});
-    });
 
     it('should return Invalid Token Error', function(done) {
+      sts = new STS({accessKeyId : "asdfasdfasdf", secretAccessKey: "asdf"});
 
       sts.getSessionToken(function(err, credentials) {
-        err.message.should.match(/InvalidClientTokenId/);
+        err.should.match(/InvalidClientTokenId/);
         should.not.exist(credentials);
 
         done();
