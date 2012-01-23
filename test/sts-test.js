@@ -1,4 +1,4 @@
-var STS = require("../lib/sts").STS,
+var STS = require("../lib/dynode/sts").STS,
     should = require('should');
 
 describe('STS', function() {
