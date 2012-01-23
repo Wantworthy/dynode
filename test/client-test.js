@@ -22,6 +22,15 @@ describe('DynamoDB Client', function() {
         done();
       });
 
+    });    
+
+    it('should describe table', function(done) {
+      
+      client.describeTable("TestTable", function(err, table) {
+        table.TableName.should.equal("TestTable");
+        done();
+      });
+
     });
 
   });
