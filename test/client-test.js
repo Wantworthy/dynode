@@ -1,4 +1,5 @@
 var Client = require("../lib/dynode/client").Client,
+    DynamoDB = require('./test-helper'),
     should = require('should');
 
 describe('DynamoDB Client', function() {
@@ -53,10 +54,10 @@ describe('DynamoDB Client', function() {
   });
 
   describe("GetItem", function() {
-       
+    
     before(function(done) {
-      client = new Client({accessKeyId : process.env.AWS_ACCEESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
-      client.putItem("TestTable", {id : "TestItem", foo: "Bar"}, done);
+      client = DynamoDB.client;
+      DynamoDB.createProduct({id : "TestItem", foo: "Bar"}, done);
     });
 
     it('should get item', function(done) {
@@ -67,6 +68,32 @@ describe('DynamoDB Client', function() {
       });
 
     });
+  });
+
+  describe("Scan", function() {
+    
+    before(function(done) {
+      client = DynamoDB.client;
+      DynamoDB.createProducts(DynamoDB.products, done);
+    });
+
+    it('should get all items', function(done) {
+      client.scan(DynamoDB.TestTable, function(err, items, meta) {
+        items.should.have.length(meta.Count);
+        done(err);
+      });
+
+    });
+
+    it('should accept limit filter', function(done) {
+      client.scan(DynamoDB.TestTable,{Limit: 2}, function(err, items, meta) {
+        items.should.have.length(2);
+        meta.Count.should.equal(2);
+        done(err);
+      });
+
+    });
+
   });
 
 });
