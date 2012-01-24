@@ -2,9 +2,13 @@ var Client = require("../lib/dynode/client").Client,
     should = require('should');
 
 describe('DynamoDB Client', function() {
+  var client;
 
   describe("with valid access keys", function() {
-    var client = new Client({accessKeyId : process.env.AWS_ACCEESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
+
+    before(function(){
+      client = new Client({accessKeyId : process.env.AWS_ACCEESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
+    });
 
     it('should list tables', function(done) {
 
@@ -22,7 +26,7 @@ describe('DynamoDB Client', function() {
         done();
       });
 
-    });    
+    }); 
 
     it('should describe table', function(done) {
       
@@ -34,4 +38,18 @@ describe('DynamoDB Client', function() {
     });
 
   });
+
+  describe("PutItem", function() {
+    before(function() {
+      client = new Client({accessKeyId : process.env.AWS_ACCEESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
+    });
+
+    it('should create new item', function(done) {
+      client.putItem("TestTable", {id : "Blah", foo: "Bar", num: 123, baz : ["a", "b", "c"]}, function(err, resp) {
+        done(err);   
+      });
+
+    });
+  });
+
 });
