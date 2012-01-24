@@ -5,7 +5,7 @@
   "author": "Ryan Fitzgerald <ryan@codebrewstudios.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/codebrew/dynode.git"
+    "url": "git@github.com:Wantworthy/dynode.git"
   },
   "keywords": ["dynamoDB", "database", "aws"],
   "dependencies": {
@@ -19,7 +19,7 @@
     "should": "0.5.x"
   },
   "scripts": {
-    "test"  : "mocha --ui bdd --reporter spec --require should test/*-test.js"
+    "test"  : "make test"
   },
   "engines": { "node": ">= 0.4.0" },
   "main": "./lib/dynode"
