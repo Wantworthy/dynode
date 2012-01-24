@@ -53,14 +53,16 @@ describe('DynamoDB Client', function() {
   });
 
   describe("GetItem", function() {
+       
     before(function(done) {
       client = new Client({accessKeyId : process.env.AWS_ACCEESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
       client.putItem("TestTable", {id : "TestItem", foo: "Bar"}, done);
     });
 
     it('should get item', function(done) {
-      client.getItem("TestTable", "TestItem", function(err, resp) {
-        should.exist(resp.Item);
+      client.getItem("TestTable", "TestItem", function(err, item, meta) {
+        item.should.eql({id : "TestItem", foo: "Bar"});
+        meta.ConsumedCapacityUnits.should.equal(0.5);
         done(err);
       });
 
