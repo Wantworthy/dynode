@@ -40,7 +40,7 @@ describe('DynamoDB Client', function() {
 
   });
 
-  describe("PutItem", function() {
+  describe("Put Item", function() {
     before(function() {
       client = new Client({accessKeyId : process.env.AWS_ACCEESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
     });
@@ -53,7 +53,7 @@ describe('DynamoDB Client', function() {
     });
   });
 
-  describe("GetItem", function() {
+  describe("Get Item", function() {
     
     before(function(done) {
       client = DynamoDB.client;
@@ -96,4 +96,27 @@ describe('DynamoDB Client', function() {
 
   });
 
+  describe("Delete Item", function() {
+    
+    beforeEach(function(done) {
+      client = DynamoDB.client;
+      DynamoDB.createProduct({id : "DeleteMe", foo: "Bar"}, done);
+    });
+
+    it('should delete an item', function(done) {
+      client.deleteItem(DynamoDB.TestTable, "DeleteMe", function(err, resp) {
+        should.exist(resp.ConsumedCapacityUnits);
+        done(err);
+      });
+
+    });
+
+    it('should delete an item and return its old values', function(done) {
+      client.deleteItem(DynamoDB.TestTable, "DeleteMe", {ReturnValues: "ALL_OLD"}, function(err, resp) {
+        resp.Attributes.should.eql({ foo: 'Bar', id: 'DeleteMe' });
+        done(err);
+      });
+    });
+
+  });
 });
