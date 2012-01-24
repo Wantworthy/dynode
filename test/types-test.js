@@ -78,4 +78,51 @@ describe('Types', function() {
 
   });
 
+  describe("parse", function(){
+    
+    it("converts to string", function(){
+      var json = Types.parse({"status":{"S":"online"}});
+
+      json.should.eql({status : "online"});
+    });
+
+    it("converts to number", function(){
+      var json = Types.parse({"age":{"N":"144"}});
+
+      json.should.eql({age : 144});
+    });
+
+    it("converts number set", function(){
+      var json = Types.parse({"nums":{"NS":["144", "22", "33"]}});
+
+      json.should.eql({nums : [144, 22, 33]});
+    });
+
+    it("converts string set", function(){
+      var json = Types.parse({"names":{"SS":["Ryan", "Steve", "John"]}});
+
+      json.should.eql({names : ["Ryan", "Steve", "John"]});
+    });
+
+    it("converts complex object", function() {
+      var item = {
+        "nums": {"NS":["144", "22", "33"]},
+        "age" : {"N": '22'},
+        "name": {"S": 'Tim'},
+        "strs": {"SS": ["foo", "bar", "baz"]}
+      };
+
+      var expected = {
+        "nums": [144, 22, 33],
+        "age" : 22,
+        "name": "Tim",
+        "strs": ["foo", "bar", "baz"]
+      }
+      var json = Types.parse(item);
+
+      json.should.eql(expected);
+    });
+
+  });
+
 });
