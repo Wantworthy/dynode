@@ -171,7 +171,6 @@ describe("DynamoDB Client unit tests", function(){
       var updates = {age : 22};
 
       client._request = function(action, options, cb) {
-        console.log(options);
         action.should.equal("UpdateItem");
         options.TableName.should.equal("TestTable");
         options.Key.should.eql({HashKeyElement: { S :"My-Key"}});
@@ -183,6 +182,36 @@ describe("DynamoDB Client unit tests", function(){
 
       client.updateItem("TestTable", "My-Key", updates, function(err, table) {});
     });
+
+    it('should make request to update item by composite key', function(done) {
+      var updates = {age : 22};
+
+      client._request = function(action, options, cb) {
+        action.should.equal("UpdateItem");
+        options.TableName.should.equal("TestTable");
+        options.Key.should.eql({HashKeyElement: { S :"My-Key"}, RangeKeyElement: { N :"123"} });
+
+        done();
+      };
+
+      client.updateItem("TestTable", {hash: "My-Key",range: 123} , updates, function(err, table) {});
+    });
+
+    it('should mix in options to the request', function(done) {
+      var updates = {age : 22},
+      opts = {"Expected":{"foo":{"Value":{"S":"bar"}}}};
+
+      client._request = function(action, options, cb) {
+        action.should.equal("UpdateItem");
+        options.TableName.should.equal("TestTable");
+        options.Expected.should.eql({"foo":{"Value":{"S":"bar"}}});
+        
+        cb();
+      };
+
+      client.updateItem("TestTable", "somekey" , updates, opts, function(err, table) {done()});
+    });
+
   });
 
 });
