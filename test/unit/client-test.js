@@ -158,13 +158,31 @@ describe("DynamoDB Client unit tests", function(){
         options.ReturnValues.should.equal("ALL_OLD");
         options.Item.should.eql({id: { S: 'blah' }});
         
-        console.log(options);
         done();
       };
 
       client.putItem("TestTable", item,{ReturnValues:"ALL_OLD"}, function(err, table) {});
     });
 
+  });
+
+  describe("Update Item", function() {
+    it('should make request to update item', function(done) {
+      var updates = {age : 22};
+
+      client._request = function(action, options, cb) {
+        console.log(options);
+        action.should.equal("UpdateItem");
+        options.TableName.should.equal("TestTable");
+        options.Key.should.eql({HashKeyElement: { S :"My-Key"}});
+
+        options.AttributeUpdates.should.eql({"age":{"Value":{"N":"22"},"Action":"PUT"}});
+
+        done();
+      };
+
+      client.updateItem("TestTable", "My-Key", updates, function(err, table) {});
+    });
   });
 
 });

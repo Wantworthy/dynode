@@ -125,4 +125,19 @@ describe('Types', function() {
 
   });
 
+  describe("update Attributes", function() {
+    it("converts simple json to all puts", function(){
+      var json = Types.updateAttributes({name: "Foo", age: 44, nums: [1,2,3], strs: ["Ryan", "ED", "Fitz"]});
+      
+      json.should.eql({
+        "name":{"Value":{"S":"Foo"},"Action":"PUT"},
+        "age" :{"Value":{"N":"44"},"Action":"PUT"},
+        "nums" :{"Value":{"NS":["1","2", "3"]},"Action":"PUT"},
+        "strs" :{"Value":{"SS":["Ryan","ED", "Fitz"]},"Action":"PUT"}
+      });
+
+    });
+
+  });
+
 });
