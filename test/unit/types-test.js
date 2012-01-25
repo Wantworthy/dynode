@@ -1,4 +1,4 @@
-var Types = require("../lib/dynode/types"),
+var Types = require("../../lib/dynode/types"),
     should = require('should');
 
 describe('Types', function() {

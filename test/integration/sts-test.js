@@ -1,7 +1,7 @@
-var STS = require("../lib/dynode/sts").STS,
+var STS = require("../../lib/dynode/sts").STS,
     should = require('should');
 
-describe('STS', function() {
+describe('STS Client Integration Tests', function() {
   var sts;
 
   describe("with valid access keys", function() {
