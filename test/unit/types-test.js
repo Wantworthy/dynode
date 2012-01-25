@@ -1,4 +1,5 @@
 var Types = require("../../lib/dynode/types"),
+    util = require('util'),
     should = require('should');
 
 describe('Types', function() {
@@ -94,7 +95,6 @@ describe('Types', function() {
 
     it("converts number set", function(){
       var json = Types.parse({"nums":{"NS":["144", "22", "33"]}});
-
       json.should.eql({nums : [144, 22, 33]});
     });
 
@@ -126,6 +126,7 @@ describe('Types', function() {
   });
 
   describe("update Attributes", function() {
+    
     it("converts simple json to all puts", function(){
       var json = Types.updateAttributes({name: "Foo", age: 44, nums: [1,2,3], strs: ["Ryan", "ED", "Fitz"]});
       
@@ -134,6 +135,42 @@ describe('Types', function() {
         "age" :{"Value":{"N":"44"},"Action":"PUT"},
         "nums" :{"Value":{"NS":["1","2", "3"]},"Action":"PUT"},
         "strs" :{"Value":{"SS":["Ryan","ED", "Fitz"]},"Action":"PUT"}
+      });
+
+    });
+
+    it("converts to add schema", function(){
+      var json = Types.updateAttributes({age: {add: 4}});
+      
+      json.should.eql({
+        "age":{"Value":{"N":"4"},"Action":"ADD"}
+      });
+
+    });
+
+    it("converts to delete schema", function(){
+      var json = Types.updateAttributes({age: {delete: 4}});
+      
+      json.should.eql({
+        "age":{"Value":{"N":"4"},"Action":"DELETE"}
+      });
+
+    });
+
+    it("converts to put schema", function(){
+      var json = Types.updateAttributes({age: {put: 4}});
+      
+      json.should.eql({
+        "age":{"Value":{"N":"4"},"Action":"PUT"}
+      });
+
+    });
+
+    it("converts to add to set schema", function(){
+      var json = Types.updateAttributes({letters: {add: ['a', 'b']}});
+     
+      json.should.eql({
+        "letters":{"Value":{"SS":['a', 'b']},"Action":"ADD"}
       });
 
     });
