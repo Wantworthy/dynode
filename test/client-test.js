@@ -1,17 +1,18 @@
 var Client = require("../lib/dynode/client").Client,
     DynamoDB = require('./test-helper'),
+    util = require('utile'),
     should = require('should');
 
 describe('DynamoDB Client', function() {
   var client;
 
-  describe("with valid access keys", function() {
+  describe("Tables", function() {
 
     before(function(){
       client = new Client({accessKeyId : process.env.AWS_ACCEESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
     });
 
-    it('should list tables', function(done) {
+    it('should list all tables', function(done) {
 
       client.listTables({}, function(err, tables) {
         tables.should.have.property("TableNames");
@@ -20,15 +21,6 @@ describe('DynamoDB Client', function() {
 
     });
 
-    it('should create table', function(done) {
-      
-      client.createTable("TestTable", function(err, table) {
-        console.log(err, table);
-        done();
-      });
-
-    }); 
-
     it('should describe table', function(done) {
       
       client.describeTable("TestTable", function(err, table) {
@@ -36,6 +28,32 @@ describe('DynamoDB Client', function() {
         done();
       });
 
+    });
+
+  });
+
+  describe("Create Table", function() {
+    var realRequest;
+
+    before(function() {
+      client = DynamoDB.client;
+      realRequest = client._request;
+    });
+
+    after(function(){
+      client._request = realRequest;
+    });
+
+    it('should create table with defaults', function(done) {
+      client._request = function(action, options, cb) {
+        action.should.equal("CreateTable");
+        options.KeySchema.HashKeyElement.should.eql({ AttributeName: 'id', AttributeType: 'S' });
+        options.ProvisionedThroughput.should.eql({ ReadCapacityUnits: 10, WriteCapacityUnits: 5 });
+
+        done();
+      };
+
+      client.createTable("TestTable", function(err, table) {});
     });
 
   });
