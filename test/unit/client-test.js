@@ -209,9 +209,50 @@ describe("DynamoDB Client unit tests", function(){
         cb();
       };
 
-      client.updateItem("TestTable", "somekey" , updates, opts, function(err, table) {done()});
+      client.updateItem("TestTable", "somekey" , updates, opts, done);
     });
 
   });
 
+  describe("Get Item", function() {
+
+    it("should get item by hash key", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("GetItem");
+        options.Key.should.eql({HashKeyElement: { S :"somekey"}});
+
+        done();
+      };
+
+      client.getItem("TestTable", "somekey", done);
+
+    });
+
+    it("should get item by composite key", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("GetItem");
+        options.Key.should.eql({HashKeyElement: { N :"123"}, RangeKeyElement: { S :"blah"} });
+
+        done();
+      };
+
+      client.getItem("TestTable", {hash: 123, range: "blah"}, done);
+
+    });
+
+    it("should make request with given options", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("GetItem");
+        options.Key.should.eql({HashKeyElement: { S :"somekey"}});
+        options.ConsistentRead.should.be.true;
+        options.AttributesToGet.should.eql(["name", "age"]);
+
+        done();
+      };
+
+      client.getItem("TestTable", "somekey",{ConsistentRead: true, "AttributesToGet":["name","age"],}, done);
+
+    });
+
+  });
 });
