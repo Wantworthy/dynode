@@ -255,4 +255,44 @@ describe("DynamoDB Client unit tests", function(){
     });
 
   });
+
+  describe("Delete Item", function() {
+
+    it("should make request to delete item by hash key", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("DeleteItem");
+        options.Key.should.eql({HashKeyElement: { S :"somekey"}});
+
+        done();
+      };
+
+      client.deleteItem("TestTable", "somekey", done);
+
+    });
+
+    it("should make request to delete item by composite key", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("DeleteItem");
+        options.Key.should.eql({HashKeyElement: { S :"somekey"}, RangeKeyElement: { S :"foo"}});
+
+        done();
+      };
+
+      client.deleteItem("TestTable", {hash: "somekey", range: "foo"}, done);
+
+    });
+
+    it("should make request to delete item with options", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("DeleteItem");
+        options.Key.should.eql({HashKeyElement: { S :"somekey"}});
+        options.ReturnValues.should.equal("ALL_OLD");
+
+        done();
+      };
+
+      client.deleteItem("TestTable", "somekey",{ReturnValues : "ALL_OLD"}, done);
+
+    });
+  });
 });
