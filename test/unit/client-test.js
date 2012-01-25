@@ -115,4 +115,56 @@ describe("DynamoDB Client unit tests", function(){
 
   });
 
+  describe("Put Item", function() {
+    it('should make request to save simple item', function(done) {
+      var item = {id : "Foo", age : 22};
+
+      client._request = function(action, options, cb) {
+        action.should.equal("PutItem");
+        options.TableName.should.equal("TestTable");
+        options.Item.should.eql({id: { S: 'Foo' }, age: { N: '22' } });
+
+        done();
+      };
+
+      client.putItem("TestTable", item, function(err, table) {});
+    });
+
+    it('should make request to save complex item', function(done) {
+      var item = {id : 99, nums : [22, 33, 44], terms : ["foo", "bar", "baz"]};
+
+      client._request = function(action, options, cb) {
+        action.should.equal("PutItem");
+        options.TableName.should.equal("TestTable");
+        
+        options.Item.should.eql({
+          id    : { N: '99' },
+          nums  : { NS: ['22', '33', '44']}, 
+          terms : { SS: ["foo", "bar", "baz"]}
+        });
+
+        done();
+      };
+
+      client.putItem("TestTable", item, function(err, table) {});
+    });
+
+    it('should make request with given options', function(done) {
+      var item = {id : "blah"};
+
+      client._request = function(action, options, cb) {
+        action.should.equal("PutItem");
+        options.TableName.should.equal("TestTable");
+        options.ReturnValues.should.equal("ALL_OLD");
+        options.Item.should.eql({id: { S: 'blah' }});
+        
+        console.log(options);
+        done();
+      };
+
+      client.putItem("TestTable", item,{ReturnValues:"ALL_OLD"}, function(err, table) {});
+    });
+
+  });
+
 });
