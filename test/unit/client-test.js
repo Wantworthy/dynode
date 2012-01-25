@@ -51,6 +51,41 @@ describe("DynamoDB Client unit tests", function(){
     });
   });
 
+  describe("Describe Table", function() {
+    it('should make describe table request', function(done) {
+      client._request = function(action, options, cb) {
+        action.should.equal("DescribeTable");
+        options.TableName.should.equal("TestTable");
+
+        done();
+      };
+
+      client.describeTable("TestTable", function(err, table) {});
+    });
+  });  
+  
+  describe("List Tables", function() {
+    it('should make request to list all tables', function(done) {
+      client._request = function(action, options, cb) {
+        action.should.equal("ListTables");
+        options.should.eql({});
+        done();
+      };
+
+      client.listTables(function(err, table) {});
+    });
+
+    it('should make request with given options', function(done) {
+      client._request = function(action, options, cb) {
+        action.should.equal("ListTables");
+        options.should.eql({Limit: 4, ExclusiveStartTableName: "SomeTable"});
+        done();
+      };
+
+      client.listTables({Limit: 4, ExclusiveStartTableName: "SomeTable"}, function(err, table) {});
+    });
+  });
+
   describe("Delete Table", function() {
     it('should delete the table', function(done) {
       client._request = function(action, options, cb) {
