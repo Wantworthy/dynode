@@ -56,6 +56,25 @@ describe('DynamoDB Client', function() {
       client.createTable("TestTable", function(err, table) {});
     });
 
+    it('should create table with custom read and write throughput', function(done) {
+      client._request = function(action, options, cb) {
+        options.ProvisionedThroughput.should.eql({ ReadCapacityUnits: 4, WriteCapacityUnits: 3 });
+        done();
+      };
+
+      client.createTable("TestTable", {read: 4, write: 3}, function(err, table) {});
+    });
+
+    it('should create table with custom keys', function(done) {
+      client._request = function(action, options, cb) {
+        options.KeySchema.HashKeyElement.should.eql({ AttributeName: 'age', AttributeType: 'N' });
+        options.KeySchema.RangeKeyElement.should.eql({ AttributeName: 'name', AttributeType: 'S' });
+        done();
+      };
+
+      client.createTable("TestTable", {hash:{age: Number}, range: {name: String}}, function(err, table) {});
+    });
+
   });
 
   describe("Put Item", function() {
