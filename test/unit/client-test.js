@@ -28,7 +28,7 @@ describe("DynamoDB Client unit tests", function(){
         done();
       };
 
-      client.createTable("CreateThisTable", function(err, table) {});
+      client.createTable("CreateThisTable", function(err, table){});
     });
 
     it('should create table with custom read and write throughput', function(done) {
@@ -52,17 +52,6 @@ describe("DynamoDB Client unit tests", function(){
   });
 
   describe("Delete Table", function() {
-    var realRequest;
-
-    before(function() {
-      client = DynamoDB.client;
-      realRequest = client._request;
-    });
-
-    after(function() {
-      client._request = realRequest;
-    });
-
     it('should delete the table', function(done) {
       client._request = function(action, options, cb) {
         action.should.equal("DeleteTable");
@@ -72,6 +61,21 @@ describe("DynamoDB Client unit tests", function(){
       };
 
       client.deleteTable("TableToDelete", function(err, table) {});
+    });
+
+  });
+
+  describe("Update Table", function() {
+    it('should update tables provisioned throughput ', function(done) {
+      client._request = function(action, options, cb) {
+        action.should.equal("UpdateTable");
+        options.TableName.should.equal("UpdateThisTable");
+        options.ProvisionedThroughput.should.eql({ ReadCapacityUnits: 5, WriteCapacityUnits: 2 });
+
+        done();
+      };
+
+      client.updateTable("UpdateThisTable",  {read: 5, write: 2}, function(err, table) {});
     });
 
   });

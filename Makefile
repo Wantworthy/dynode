@@ -25,6 +25,6 @@ test-spec:
 		--reporter spec \
 		--require should \
 		--grep "$(grep)" \
-		test/*-test.js
+		test/unit/*-test.js
 
 .PHONY: test test-all test-unit test-integration
