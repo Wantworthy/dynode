@@ -47,13 +47,14 @@ describe('DynamoDB Client', function() {
     it('should create table with defaults', function(done) {
       client._request = function(action, options, cb) {
         action.should.equal("CreateTable");
+        options.TableName.should.equal("CreateThisTable");
         options.KeySchema.HashKeyElement.should.eql({ AttributeName: 'id', AttributeType: 'S' });
         options.ProvisionedThroughput.should.eql({ ReadCapacityUnits: 10, WriteCapacityUnits: 5 });
 
         done();
       };
 
-      client.createTable("TestTable", function(err, table) {});
+      client.createTable("CreateThisTable", function(err, table) {});
     });
 
     it('should create table with custom read and write throughput', function(done) {
@@ -73,6 +74,31 @@ describe('DynamoDB Client', function() {
       };
 
       client.createTable("TestTable", {hash:{age: Number}, range: {name: String}}, function(err, table) {});
+    });
+
+  });
+
+  describe("Delete Table", function() {
+    var realRequest;
+
+    before(function() {
+      client = DynamoDB.client;
+      realRequest = client._request;
+    });
+
+    after(function(){
+      client._request = realRequest;
+    });
+
+    it('should delete the table', function(done) {
+      client._request = function(action, options, cb) {
+        action.should.equal("DeleteTable");
+        options.TableName.should.equal("TableToDelete");
+
+        done();
+      };
+
+      client.deleteTable("TableToDelete", function(err, table) {});
     });
 
   });
