@@ -295,4 +295,11 @@ describe("DynamoDB Client unit tests", function(){
 
     });
   });
+
+
+  describe("DynamoErrors", function() {
+    // see https://github.com/Tim-Smart/express-aid/blob/master/index.js#L66-113
+    // http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/ErrorHandling.html
+    it('should handle all the various types of errors that DynamoDB can return');
+  });
 });
