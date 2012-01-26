@@ -368,6 +368,50 @@ describe("DynamoDB Client unit tests", function(){
 
   });
 
+  describe("BatchGetItem", function() {
+    it("should make batch item request with given keys", function(done){
+      client._request = function(action, options, cb) {
+        var request = options.RequestItems;
+        action.should.equal("BatchGetItem");
+
+        request.BatchTable.Keys.should.eql([{"HashKeyElement": {"S":"blah"}}, {"HashKeyElement": {"S":"moreBlah"}} ]);
+        request.AnotherTable.Keys.should.eql([{"HashKeyElement": {"S":"anotherKey"}, "RangeKeyElement":{"N":"123"}} ]);
+
+        cb(null, {});
+      };
+
+      var options = {
+        "BatchTable": {keys:[{hash: "blah"}, {hash: "moreBlah"}]},
+        "AnotherTable": {keys:[{hash: "anotherKey", range: 123}]}
+      }
+
+      client.batchGetItem(options, done);
+    });
+
+    it("should make batch item request with AttributesToGet", function(done){
+      client._request = function(action, options, cb) {
+        var request = options.RequestItems;
+        action.should.equal("BatchGetItem");
+
+        request.BatchTable.Keys.should.eql([{"HashKeyElement": {"S":"blah"}}]);
+        request.BatchTable.AttributesToGet.should.eql(["name", "age"]);
+
+        request.AnotherTable.Keys.should.eql([{"HashKeyElement": {"S":"anotherKey"}} ]);
+        should.not.exist(request.AnotherTable.AttributesToGet);
+
+        cb(null, {});
+      };
+
+      var options = {
+        "BatchTable": {keys:[{hash: "blah"}], AttributesToGet : ["name", "age"]},
+        "AnotherTable": {keys:[{hash: "anotherKey"}]}
+      }
+
+      client.batchGetItem(options, done);
+    });
+
+  });
+
   describe("DynamoErrors", function() {
     // see https://github.com/Tim-Smart/express-aid/blob/master/index.js#L66-113
     // http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/ErrorHandling.html
