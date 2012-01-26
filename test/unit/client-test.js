@@ -25,29 +25,29 @@ describe("DynamoDB Client unit tests", function(){
         options.KeySchema.HashKeyElement.should.eql({ AttributeName: 'id', AttributeType: 'S' });
         options.ProvisionedThroughput.should.eql({ ReadCapacityUnits: 10, WriteCapacityUnits: 5 });
 
-        done();
+        cb();
       };
 
-      client.createTable("CreateThisTable", function(err, table){});
+      client.createTable("CreateThisTable", done);
     });
 
     it('should create table with custom read and write throughput', function(done) {
       client._request = function(action, options, cb) {
         options.ProvisionedThroughput.should.eql({ ReadCapacityUnits: 4, WriteCapacityUnits: 3 });
-        done();
+        cb();
       };
 
-      client.createTable("TestTable", {read: 4, write: 3}, function(err, table) {});
+      client.createTable("TestTable", {read: 4, write: 3}, done);
     });
 
     it('should create table with custom keys', function(done) {
       client._request = function(action, options, cb) {
         options.KeySchema.HashKeyElement.should.eql({ AttributeName: 'age', AttributeType: 'N' });
         options.KeySchema.RangeKeyElement.should.eql({ AttributeName: 'name', AttributeType: 'S' });
-        done();
+        cb();
       };
 
-      client.createTable("TestTable", {hash:{age: Number}, range: {name: String}}, function(err, table) {});
+      client.createTable("TestTable", {hash:{age: Number}, range: {name: String}}, done);
     });
   });
 
@@ -57,10 +57,10 @@ describe("DynamoDB Client unit tests", function(){
         action.should.equal("DescribeTable");
         options.TableName.should.equal("TestTable");
 
-        done();
+        cb(null, {});
       };
 
-      client.describeTable("TestTable", function(err, table) {});
+      client.describeTable("TestTable", done);
     });
   });  
   
@@ -69,20 +69,21 @@ describe("DynamoDB Client unit tests", function(){
       client._request = function(action, options, cb) {
         action.should.equal("ListTables");
         options.should.eql({});
-        done();
+        cb();
       };
 
-      client.listTables(function(err, table) {});
+      client.listTables(done);
     });
 
     it('should make request with given options', function(done) {
       client._request = function(action, options, cb) {
         action.should.equal("ListTables");
         options.should.eql({Limit: 4, ExclusiveStartTableName: "SomeTable"});
-        done();
+        
+        cb();
       };
 
-      client.listTables({Limit: 4, ExclusiveStartTableName: "SomeTable"}, function(err, table) {});
+      client.listTables({Limit: 4, ExclusiveStartTableName: "SomeTable"}, done);
     });
   });
 
@@ -92,10 +93,10 @@ describe("DynamoDB Client unit tests", function(){
         action.should.equal("DeleteTable");
         options.TableName.should.equal("TableToDelete");
 
-        done();
+        cb();
       };
 
-      client.deleteTable("TableToDelete", function(err, table) {});
+      client.deleteTable("TableToDelete", done);
     });
 
   });
@@ -107,10 +108,10 @@ describe("DynamoDB Client unit tests", function(){
         options.TableName.should.equal("UpdateThisTable");
         options.ProvisionedThroughput.should.eql({ ReadCapacityUnits: 5, WriteCapacityUnits: 2 });
 
-        done();
+        cb();
       };
 
-      client.updateTable("UpdateThisTable",  {read: 5, write: 2}, function(err, table) {});
+      client.updateTable("UpdateThisTable",  {read: 5, write: 2}, done);
     });
 
   });
@@ -124,10 +125,10 @@ describe("DynamoDB Client unit tests", function(){
         options.TableName.should.equal("TestTable");
         options.Item.should.eql({id: { S: 'Foo' }, age: { N: '22' } });
 
-        done();
+        cb();
       };
 
-      client.putItem("TestTable", item, function(err, table) {});
+      client.putItem("TestTable", item, done);
     });
 
     it('should make request to save complex item', function(done) {
@@ -143,10 +144,10 @@ describe("DynamoDB Client unit tests", function(){
           terms : { SS: ["foo", "bar", "baz"]}
         });
 
-        done();
+        cb();
       };
 
-      client.putItem("TestTable", item, function(err, table) {});
+      client.putItem("TestTable", item, done);
     });
 
     it('should make request with given options', function(done) {
@@ -158,10 +159,10 @@ describe("DynamoDB Client unit tests", function(){
         options.ReturnValues.should.equal("ALL_OLD");
         options.Item.should.eql({id: { S: 'blah' }});
         
-        done();
+        cb();
       };
 
-      client.putItem("TestTable", item,{ReturnValues:"ALL_OLD"}, function(err, table) {});
+      client.putItem("TestTable", item,{ReturnValues:"ALL_OLD"}, done);
     });
 
   });
@@ -177,10 +178,10 @@ describe("DynamoDB Client unit tests", function(){
 
         options.AttributeUpdates.should.eql({"age":{"Value":{"N":"22"},"Action":"PUT"}});
 
-        done();
+        cb();
       };
 
-      client.updateItem("TestTable", "My-Key", updates, function(err, table) {});
+      client.updateItem("TestTable", "My-Key", updates, done);
     });
 
     it('should make request to update item by composite key', function(done) {
@@ -191,10 +192,10 @@ describe("DynamoDB Client unit tests", function(){
         options.TableName.should.equal("TestTable");
         options.Key.should.eql({HashKeyElement: { S :"My-Key"}, RangeKeyElement: { N :"123"} });
 
-        done();
+        cb();
       };
 
-      client.updateItem("TestTable", {hash: "My-Key",range: 123} , updates, function(err, table) {});
+      client.updateItem("TestTable", {hash: "My-Key",range: 123} , updates, done);
     });
 
     it('should mix in options to the request', function(done) {
@@ -279,7 +280,6 @@ describe("DynamoDB Client unit tests", function(){
       };
 
       client.deleteItem("TestTable", {hash: "somekey", range: "foo"}, done);
-
     });
 
     it("should make request to delete item with options", function(done){
@@ -302,7 +302,7 @@ describe("DynamoDB Client unit tests", function(){
         action.should.equal("Scan");
         options.TableName.should.eql("TestTable");
         options.Limit.should.equal(2);
-        
+
         cb(null, {});
       };
 
