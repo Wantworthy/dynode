@@ -296,6 +296,46 @@ describe("DynamoDB Client unit tests", function(){
     });
   });
 
+  describe("Query", function() {
+    it("should make query request with string hash key", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("Query");
+        options.TableName.should.eql("QueryTable");
+        options.HashKeyValue.should.eql({"S":"my-key"});
+
+        cb(null, {});
+      };
+
+      client.query("QueryTable", "my-key", done);
+    });
+
+    it("should make query request with number hash key", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("Query");
+        options.TableName.should.eql("QueryTable");
+        options.HashKeyValue.should.eql({"N":"33"});
+
+        done();
+      };
+
+      client.query("QueryTable", 33);
+    });
+
+    it("should make query request with options", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("Query");
+        options.TableName.should.eql("QueryTable");
+        options.RangeKeyCondition.should.eql({"AttributeValueList":[{"N":"AttributeValue2"}],"ComparisonOperator":"GT"});
+        options.Limit.should.equal(13);
+        
+        cb();
+      };
+
+      client.query("QueryTable", "thiskey",{Limit: 13,RangeKeyCondition: {AttributeValueList:[{"N":"AttributeValue2"}],"ComparisonOperator":"GT"}}, done );
+    });
+
+  });
+
   describe("Scan", function() {
     it("should make scan request with options", function(done){
       client._request = function(action, options, cb) {
