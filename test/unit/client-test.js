@@ -296,6 +296,37 @@ describe("DynamoDB Client unit tests", function(){
     });
   });
 
+  describe("Scan", function() {
+    it("should make scan request with options", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("Scan");
+        options.TableName.should.eql("TestTable");
+        options.Limit.should.equal(2);
+        
+        cb(null, {});
+      };
+
+      client.scan("TestTable", {Limit : 2}, done);
+    });
+
+    it("should convert returned items to json", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("Scan");
+        options.TableName.should.eql("TestTable");
+
+        cb(null, {Items: [{"name":{"S":"Ryan"}}, {"name":{"S":"Bob"}}] });
+      };
+
+      client.scan("TestTable", {Limit : 2}, function(err, items) {
+        items.should.have.lengthOf(2);
+        items[0].should.eql({name: "Ryan"});
+        items[1].should.eql({name: "Bob"});
+        done();
+      });
+
+    });
+
+  });
 
   describe("DynamoErrors", function() {
     // see https://github.com/Tim-Smart/express-aid/blob/master/index.js#L66-113
