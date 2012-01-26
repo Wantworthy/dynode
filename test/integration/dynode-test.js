@@ -57,27 +57,17 @@ describe('Dynode Integration Tests', function() {
     });
   });
 
-  describe("Scan", function() {
-    
+  describe("Update Item", function() {
+
     before(function(done) {
-      DynamoDB.createProducts(DynamoDB.products, done);
+      DynamoDB.createProduct({id: "updateTest", foo: "baz"}, done);
     });
 
-    it('should get all items', function(done) {
-      dynode.scan(DynamoDB.TestTable, function(err, items, meta) {
-        items.should.have.length(meta.Count);
+    it('should update existing item', function(done) {
+      dynode.updateItem(DynamoDB.TestTable, "updateTest", {foo: "Bar"}, {ReturnValues: "UPDATED_NEW"}, function(err, resp) {
+        resp.Attributes.should.eql({ foo: { S: 'Bar' } });
         done(err);
       });
-
-    });
-
-    it('should accept limit filter', function(done) {
-      dynode.scan(DynamoDB.TestTable,{Limit: 2}, function(err, items, meta) {
-        items.should.have.length(2);
-        meta.Count.should.equal(2);
-        done(err);
-      });
-
     });
 
   });
@@ -104,4 +94,30 @@ describe('Dynode Integration Tests', function() {
     });
 
   });
+
+  describe("Scan", function() {
+    
+    before(function(done) {
+      DynamoDB.createProducts(DynamoDB.products, done);
+    });
+
+    it('should get all items', function(done) {
+      dynode.scan(DynamoDB.TestTable, function(err, items, meta) {
+        items.should.have.length(meta.Count);
+        done(err);
+      });
+
+    });
+
+    it('should accept limit filter', function(done) {
+      dynode.scan(DynamoDB.TestTable,{Limit: 2}, function(err, items, meta) {
+        items.should.have.length(2);
+        meta.Count.should.equal(2);
+        done(err);
+      });
+
+    });
+
+  });
+
 });
