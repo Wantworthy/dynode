@@ -1,5 +1,6 @@
 REPORTER = spec
 ui = bdd
+VERSION := $(shell cat package.json | grep version | grep -o '[0-9]\.[0-9]\.[0-9]')
 
 test: test-unit
 	
@@ -26,5 +27,11 @@ test-spec:
 		--require should \
 		--grep "$(grep)" \
 		test/unit/*-test.js test/integration/*-test.js
+
+release:
+	git tag -a v$(VERSION) -m 'release version $(VERSION)'
+	git push
+	git push --tags
+	npm publish .
 
 .PHONY: test test-all test-unit test-integration
