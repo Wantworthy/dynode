@@ -13,7 +13,7 @@ node.js client for working with Amazon's [DynamoDB](http://docs.amazonwebservice
   $ [sudo] npm install dynode
 ```
 ## Motivation
-Dynode is designed to be a simple and easy way to work with Amazon's DynamoDB service. Amazon's http api is complicated and non obvious how to interact with it. This driver aims to offer a simplified more obvious way of working with DynamoDB, but without getting in your way or limiting what you can do with DynamoDB.
+Dynode is designed to be a simple and easy way to work with Amazon's DynamoDB service. Amazon's http api is complicated and non obvious how to interact with it. This client aims to offer a simplified more obvious way of working with DynamoDB, but without getting in your way or limiting what you can do with DynamoDB.
 
 ## Usage
 There are two different ways to use dynode: directly via the default dynamoDB client, or by instantiating your own client. The former is merely intended to be a convenient shared client to use throughout your application if you so choose.
@@ -35,7 +35,7 @@ If you would prefer to manage your own client, potentially with different auth p
 
 ``` js
   var client = new (dynode.Client)({
-	accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"
+    accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"
   });
 ```
 
