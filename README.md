@@ -65,8 +65,7 @@ Before you can perform any operations on DynamoDB you need to provide your Amazo
 
 <a name="createTable"></a>
 ## Create Table
-
-For more info on creating tables see [here](http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_CreateTable.html)
+The CreateTable operation adds a new table to your account. For more info see [here][createTablesDocs]
 
 By default `createTable` will create the given table with a primary key of id : String, a read capacity of 10 and write capacity of 5.
 
@@ -83,8 +82,7 @@ By default `createTable` will create the given table with a primary key of id : 
 
 <a name="listTables"></a>
 ## List Tables
-
-For more info see [here][listTablesApi]
+Returns an array of all the tables associated with the current account. For more info see [here][listTablesDocs]
 
 By default `listTables` will list all of your DynamoDB tables.
 
@@ -92,7 +90,7 @@ By default `listTables` will list all of your DynamoDB tables.
   dynode.listTables(console.log);
 ```
 
-You can also pass in options to filter which tables to list. See [Amazon's docs][listTablesApi] for more info 
+You can also pass in options to filter which tables to list. See [Amazon's docs][listTablesDocs] for more info 
 
 ``` js
   dynode.listTables({Limit: 3, ExclusiveStartTableName: "ExampleTable"}, console.log);
@@ -102,7 +100,7 @@ You can also pass in options to filter which tables to list. See [Amazon's docs]
 ## Describe Table
 
 Returns information about the table, including the current status of the table, the primary key schema and when the table was created. 
-For more info see [here][describeTableApi]
+For more info see [here][describeTableDocs]
 
 ``` js
   dynode.descibeTable("ExampleTable", console.log);
@@ -129,6 +127,7 @@ All tests are written with [mocha][0] and should be run with make:
 
 [0]: http://visionmedia.github.com/mocha/
 [1]: http://www.apache.org/licenses/LICENSE-2.0
-[listTablesApi]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_ListTables.html
-[describeTableApi]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DescribeTables.html
+[createTablesDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_CreateTable.html
+[listTablesDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_ListTables.html
+[describeTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DescribeTables.html
 [updateTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateTable.html
