@@ -238,7 +238,7 @@ The Scan operation returns one or more items and its attributes by performing a 
   var opts = {
     Limit: 5,
     ScanFilter : {"AttributeName1":{"AttributeValueList":[{"S":"AttributeValue"}],"ComparisonOperator":"EQ"}},
-    AttributesToGet":["AttributeName1", "AttributeName2", "AttributeName3"]
+    AttributesToGet :["AttributeName1", "AttributeName2", "AttributeName3"]
   };
 
   dynode.query("ExampleTable", opts, console.log);
