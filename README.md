@@ -92,10 +92,29 @@ By default `listTables` will list all of your DynamoDB tables.
   dynode.listTables(console.log);
 ```
 
-You can also pass in options to filter which tables to list. 
+You can also pass in options to filter which tables to list. See [Amazon's docs][listTablesApi] for more info 
 
 ``` js
   dynode.listTables({Limit: 3, ExclusiveStartTableName: "ExampleTable"}, console.log);
+```
+
+<a name="describeTable"></a>
+## Describe Table
+
+Returns information about the table, including the current status of the table, the primary key schema and when the table was created. 
+For more info see [here][describeTableApi]
+
+``` js
+  dynode.descibeTable("ExampleTable", console.log);
+```
+
+<a name="updateTable"></a>
+## Update Table
+
+Updates the provisioned throughput for the given table. For more info see [here][updateTableDocs]
+
+``` js
+  dynode.updateTable("ExampleTable", {read: 15, write: 10}, console.log);
 ```
 
 ## Tests
@@ -111,3 +130,5 @@ All tests are written with [mocha][0] and should be run with make:
 [0]: http://visionmedia.github.com/mocha/
 [1]: http://www.apache.org/licenses/LICENSE-2.0
 [listTablesApi]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_ListTables.html
+[describeTableApi]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DescribeTables.html
+[updateTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateTable.html
