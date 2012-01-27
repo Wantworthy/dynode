@@ -224,6 +224,26 @@ A Query operation gets the values of one or more items and their attributes by p
   dynode.query("ExampleTable", "TheHashKey", opts, console.log);
 ```
 
+<a name="scan"></a>
+## Scan
+The Scan operation returns one or more items and its attributes by performing a full scan of a table. For more info see [here][scanDocs]
+
+``` js
+  dynode.scan("ExampleTable", console.log);
+```
+
+`scan` accepts any option that Amazon accepts.
+
+``` js
+  var opts = {
+    Limit: 5,
+    ScanFilter : {"AttributeName1":{"AttributeValueList":[{"S":"AttributeValue"}],"ComparisonOperator":"EQ"}},
+    AttributesToGet":["AttributeName1", "AttributeName2", "AttributeName3"]
+  };
+
+  dynode.query("ExampleTable", opts, console.log);
+```
+
 ## Tests
 All tests are written with [mocha][0] and should be run with make:
 
@@ -245,3 +265,4 @@ All tests are written with [mocha][0] and should be run with make:
 [getItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_GetItem.html
 [deleteItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DeleteItem.html
 [queryDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_Query.html
+[scanDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_Scan.html
