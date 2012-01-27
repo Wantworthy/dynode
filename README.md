@@ -208,6 +208,22 @@ Deletes a single item in a table by primary key. For more info see [here][delete
   dynode.deleteItem("ExampleTable", "TheHashKey", opts, console.log);
 ```
 
+<a name="query"></a>
+## Query
+A Query operation gets the values of one or more items and their attributes by primary key. For more info see [here][queryDocs]
+
+``` js
+  dynode.query("ExampleTable", "TheHashKey", console.log);
+```
+
+`query` accepts any option that Amazon accepts.
+
+``` js
+  var opts = {RangeKeyCondition: {AttributeValueList :[{"N":"AttributeValue2"}],"ComparisonOperator":"GT"}};
+
+  dynode.query("ExampleTable", "TheHashKey", opts, console.log);
+```
+
 ## Tests
 All tests are written with [mocha][0] and should be run with make:
 
@@ -228,3 +244,4 @@ All tests are written with [mocha][0] and should be run with make:
 [updateItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateItem.html
 [getItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_GetItem.html
 [deleteItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DeleteItem.html
+[queryDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_Query.html
