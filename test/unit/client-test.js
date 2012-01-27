@@ -1,5 +1,4 @@
 var Client = require("../../lib/dynode/client").Client,
-    DynamoDB = require('../test-helper'),
     util = require('utile'),
     should = require('should');
 
@@ -8,7 +7,7 @@ describe("DynamoDB Client unit tests", function(){
       client;
 
   beforeEach(function() {
-    client = DynamoDB.client;
+    client = new Client({accessKeyId :"MockId", secretAccessKey: "MockKey"});
     realRequest = client._request;
   });
 
