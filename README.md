@@ -160,8 +160,52 @@ Perform specific action to perform for the given update
 
 ``` js
   var opts = {ReturnValues : "ReturnValuesConstant", Expected :{"status":{"Value":{"S":"offline"}}}};
-  
+
   dynode.updateItem("ExampleTable", "TheKey", {name: "Ryan"}, opts, console.log);
+```
+
+<a name="getItem"></a>
+## Get Item
+The `getItem` operation returns a set of Attributes for an item that matches the primary key. For more info see [here][getItemDocs]
+
+``` js
+  dynode.getItem("ExampleTable", "TheHashKey", console.log);
+```
+
+`getItem` also accepts a key object to specify which item to get.
+
+``` js
+  dynode.getItem("ExampleTable", {hash: "TheHashKey", range: 123}, console.log);
+```
+
+`getItem` accepts any option that Amazon accepts.
+
+``` js
+  var opts = {AttributesToGet: ["status","friends"], ConsistentRead : true};
+
+  dynode.getItem("ExampleTable", "TheHashKey", opts, console.log);
+```
+
+<a name="deleteItem"></a>
+## Delete Item
+Deletes a single item in a table by primary key. For more info see [here][deleteItemDocs]
+
+``` js
+  dynode.deleteItem("ExampleTable", "TheHashKey", console.log);
+```
+
+`deleteItem` also accepts a key object to specify which item to delete.
+
+``` js
+  dynode.deleteItem("ExampleTable", {hash: "TheHashKey", range: 123}, console.log);
+```
+
+`deleteItem` accepts any option that Amazon accepts.
+
+``` js
+  var opts = {ReturnValues : "ALL_OLD"};
+
+  dynode.deleteItem("ExampleTable", "TheHashKey", opts, console.log);
 ```
 
 ## Tests
@@ -182,3 +226,5 @@ All tests are written with [mocha][0] and should be run with make:
 [updateTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateTable.html
 [putItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_PutItem.html
 [updateItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateItem.html
+[getItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_GetItem.html
+[deleteItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DeleteItem.html
