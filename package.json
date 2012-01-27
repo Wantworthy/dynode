@@ -1,13 +1,19 @@
 {
   "name": "dynode",
   "description": "node.js driver for Amazon's DynamoDB",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Ryan Fitzgerald <ryan@codebrewstudios.com>",
   "repository": {
     "type": "git",
     "url": "git@github.com:Wantworthy/dynode.git"
   },
-  "keywords": ["dynamoDB", "database", "aws"],
+  "licenses": [
+    {
+      "type": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+   ],
+  "keywords": ["dynamoDB", "database", "aws", "nosql", "amazon"],
   "dependencies": {
     "request": "2.9.x",
     "utile": "0.0.10",
