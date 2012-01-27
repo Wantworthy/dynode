@@ -29,7 +29,7 @@ describe('STS Client Integration Tests', function() {
       sts = new STS({accessKeyId : "asdfasdfasdf", secretAccessKey: "asdf"});
 
       sts.getSessionToken(function(err, credentials) {
-        err.should.match(/InvalidClientTokenId/);
+        err.type.should.equal("InvalidClientTokenId");
         should.not.exist(credentials);
 
         done();

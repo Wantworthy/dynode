@@ -132,4 +132,18 @@ describe('Dynode Integration Tests', function() {
 
   });
 
+  describe("Error Handling", function(){
+
+    it("should return error for non existant table", function(done) {
+      
+      dynode.describeTable("NonExistTable", function(err) {
+        err.type.should.equal("ResourceNotFoundException");
+
+        done();
+      });
+
+    });
+
+  });
+
 });
