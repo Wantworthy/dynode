@@ -5,7 +5,7 @@
   "author": "Ryan Fitzgerald <ryan@codebrewstudios.com>",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Wantworthy/dynode.git"
+    "url": "git://github.com/Wantworthy/dynode.git"
   },
   "licenses": [
     {
