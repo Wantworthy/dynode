@@ -31,7 +31,7 @@ The default client is accessible through the dynode module directly. Any method 
 ```
 
 ### Instantiating your own DynamoDB Client
-If you would prefer to manage your own client, pontentially with different auth params if you want:
+If you would prefer to manage your own client, potentially with different auth params:
 
 ``` js
   var client = new (dynode.Client)({
@@ -115,6 +115,23 @@ Updates the provisioned throughput for the given table. For more info see [here]
   dynode.updateTable("ExampleTable", {read: 15, write: 10}, console.log);
 ```
 
+<a name="putItem"></a>
+## Put Item
+Creates a new item, or replaces an old item with a new item (including all the attributes). For more info see [here][putItemDocs]
+
+``` js
+  dynode.putItem("ExampleTable", {name : "Foo", age: 80, baz : ["a", "b", "c"], nums: [1,2,3]}, console.log);
+```
+
+You can also pass in any option that Amazon accepts.
+
+``` js
+  var item = {name : "Bob"};
+  var options = {ReturnValues:"ReturnValuesConstant", Expected :{"age":{"Value": {"N":"42"},{"Exists":Boolean}}}};
+
+  dynode.putItem("ExampleTable", item, options, console.log);
+```
+
 ## Tests
 All tests are written with [mocha][0] and should be run with make:
 
@@ -131,3 +148,4 @@ All tests are written with [mocha][0] and should be run with make:
 [listTablesDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_ListTables.html
 [describeTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DescribeTables.html
 [updateTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateTable.html
+[putItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_PutItem.html
