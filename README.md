@@ -132,6 +132,38 @@ You can also pass in any option that Amazon accepts.
   dynode.putItem("ExampleTable", item, options, console.log);
 ```
 
+<a name="updateItem"></a>
+## Update Item
+Edits an existing item's attributes. For more info see [here][updateItemDocs]
+
+By default all operations will be a PUT, which will add or replace the attribute with the new value.
+
+``` js
+  dynode.updateItem("ExampleTable", "ItemHashKey", {name: "Ryan"}, console.log);
+```
+
+`updateItem` also accepts a key object to specify which item to update.
+
+``` js
+  dynode.updateItem("ExampleTable", {hash: "Key", range: 22}, {name: "Ryan"}, console.log);
+```
+
+Perform specific action to perform for the given update
+
+``` js
+  var updates = {nums: {'delete' : [5]}, age: {add: 2}};
+
+  dynode.updateItem("ExampleTable", "ItemsHashKey", updates, console.log);
+```
+
+`updateItem` accepts options which lets you pass in any option that Amazon accepts.
+
+``` js
+  var opts = {ReturnValues : "ReturnValuesConstant", Expected :{"status":{"Value":{"S":"offline"}}}};
+  
+  dynode.updateItem("ExampleTable", "TheKey", {name: "Ryan"}, opts, console.log);
+```
+
 ## Tests
 All tests are written with [mocha][0] and should be run with make:
 
@@ -149,3 +181,4 @@ All tests are written with [mocha][0] and should be run with make:
 [describeTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DescribeTables.html
 [updateTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateTable.html
 [putItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_PutItem.html
+[updateItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateItem.html
