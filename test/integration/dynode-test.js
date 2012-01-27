@@ -62,7 +62,7 @@ describe('Dynode Integration Tests', function() {
     before(function(done) {
       DynamoDB.createProducts([
         {id: "updateTest", foo: "baz"}, 
-        {id: "update2", nums: [1,2,3]}
+        {id: "update2", nums: [1,2,3], age: 22}
       ], done);
     });
 
@@ -74,9 +74,10 @@ describe('Dynode Integration Tests', function() {
     });
 
     it('should update existing Item by adding a number to a set of numbers', function(done) {
-      dynode.updateItem(DynamoDB.TestTable, "update2", {nums: {add : [5]}}, {ReturnValues: "UPDATED_NEW"}, function(err, resp) {
+      dynode.updateItem(DynamoDB.TestTable, "update2", {nums: {add : [5]}, age: {add: 2}}, {ReturnValues: "UPDATED_NEW"}, function(err, resp) {
         var nums = resp.Attributes.nums.NS.sort();
         nums.should.eql(['1', '2', '3', '5']);
+        resp.Attributes.age.should.eql({'N' : '24'});
         done(err);
       });
     });
