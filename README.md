@@ -32,7 +32,7 @@ If you would prefer to manage your own client, pontentially with different auth 
 
 ``` js
   var client = new (dynode.Client)({
-	{accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"}
+	accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"
   });
 ```
 
