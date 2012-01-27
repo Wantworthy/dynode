@@ -69,6 +69,7 @@ Before you can perform any operations on DynamoDB you need to provide your Amazo
 For more info on creating tables see [here](http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_CreateTable.html)
 
 By default `createTable` will create the given table with a primary key of id : String, a read capacity of 10 and write capacity of 5.
+
 ``` js
   dynode.createTable("ExampleTable", console.log);
 ```
