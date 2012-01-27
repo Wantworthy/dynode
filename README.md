@@ -1,5 +1,5 @@
 # dynode [![Build Status](https://secure.travis-ci.org/Wantworthy/dynode.png)](http://travis-ci.org/Wantworthy/dynode)
-Dynode is a node.js driver for working with Amazon's [DynamoDB](http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/Introduction.html?r=5378) service.
+node.js client for working with Amazon's [DynamoDB](http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/Introduction.html?r=5378) service.
 
 ## Installation
 
@@ -23,6 +23,7 @@ The default client is accessible through the dynode module directly. Any method 
 
 ``` js
   var dynode = require('dynode');
+  // When using the default client you must first give it auth credentials
   dynode.auth({accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"});
 
   dynode.createTable("NewTable", console.log);
@@ -52,6 +53,32 @@ If you would prefer to manage your own client, pontentially with different auth 
 * [Query](#query)
 * [Scan](#scan)
 * [Batch Get Item](#batchGetItem)
+
+<a name="auth"></a>
+## Auth
+
+Before you can perform any operations on DynamoDB you need to provide your Amazon credentials.
+
+``` js
+  dynode.auth({accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"});
+```
+
+<a name="createTable"></a>
+## Create Table
+
+For more info on creating tables see [here](http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_CreateTable.html)
+
+By default `createTable` will create the given table with a primary key of id : String, a read capacity of 10 and write capacity of 5.
+``` js
+  dynode.createTable("ExampleTable", console.log);
+```
+
+`createTable` accepts an options hash to override any of the table creation defaults.
+
+``` js
+  var opts = {read: 20, write: 25, hash: {name: String}, range: {age: Number}};
+  dynode.createTable("ExampleTable", opts, console.log);
+```
 
 ## Tests
 All tests are written with [mocha][0] and should be run with make:
