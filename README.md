@@ -244,6 +244,30 @@ The Scan operation returns one or more items and its attributes by performing a 
   dynode.query("ExampleTable", opts, console.log);
 ```
 
+<a name="batchGetItem"></a>
+## Batch Get Item
+The BatchGetItem operation returns the attributes for multiple items from multiple tables using their primary keys. For more info see [here][batchGetDocs]
+
+``` js
+  var query = {
+    "ExampleTable": {keys:[{hash: "someKey"}, {hash: "someKey2"}]},
+    "AnotherTable": {keys:[{hash: "anotherKey", range: 123}]}
+  }
+
+  dynode.batchGetItem(query, console.log);
+```
+
+`scan` accepts any option that Amazon accepts.
+
+``` js
+  var filter = {
+    "ExampleTable": {keys:[{hash: "someKey"}], AttributesToGet :["name", "age"]},
+    "AnotherTable": {keys:[{hash: "anotherKey", range: 123}], AttributesToGet :["brand", "price"]}
+  }
+
+  dynode.query(filter, console.log);
+```
+
 ## Tests
 All tests are written with [mocha][0] and should be run with make:
 
@@ -266,3 +290,4 @@ All tests are written with [mocha][0] and should be run with make:
 [deleteItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DeleteItem.html
 [queryDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_Query.html
 [scanDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_Scan.html
+[batchGetDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_BatchGetItems.html
