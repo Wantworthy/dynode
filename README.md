@@ -81,6 +81,23 @@ By default `createTable` will create the given table with a primary key of id : 
   dynode.createTable("ExampleTable", opts, console.log);
 ```
 
+<a name="listTables"></a>
+## List Tables
+
+For more info see [here][listTablesApi]
+
+By default `listTables` will list all of your DynamoDB tables.
+
+``` js
+  dynode.listTables(console.log);
+```
+
+You can also pass in options to filter which tables to list. 
+
+``` js
+  dynode.listTables({Limit: 3, ExclusiveStartTableName: "ExampleTable"}, console.log);
+```
+
 ## Tests
 All tests are written with [mocha][0] and should be run with make:
 
@@ -93,3 +110,4 @@ All tests are written with [mocha][0] and should be run with make:
 
 [0]: http://visionmedia.github.com/mocha/
 [1]: http://www.apache.org/licenses/LICENSE-2.0
+[listTablesApi]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_ListTables.html
