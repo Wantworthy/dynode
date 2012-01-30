@@ -103,7 +103,7 @@ Returns information about the table, including the current status of the table, 
 For more info see [here][describeTableDocs]
 
 ``` js
-  dynode.descibeTable("ExampleTable", console.log);
+  dynode.describeTable("ExampleTable", console.log);
 ```
 
 <a name="updateTable"></a>
