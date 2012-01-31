@@ -70,7 +70,7 @@ The CreateTable operation adds a new table to your account. For more info see [h
 By default `createTable` will create the given table with a primary key of id : String, a read capacity of 10 and write capacity of 5.
 
 ``` js
-  dynode.createTable("ExampleTable", console.log);
+  dynode.createTable("ExampleTable", function (error));
 ```
 
 `createTable` accepts an options hash to override any of the table creation defaults.
@@ -87,7 +87,7 @@ Returns an array of all the tables associated with the current account. For more
 By default `listTables` will list all of your DynamoDB tables.
 
 ``` js
-  dynode.listTables(console.log);
+  dynode.listTables(function (error, tables));
 ```
 
 You can also pass in options to filter which tables to list. See [Amazon's docs][listTablesDocs] for more info 
@@ -103,7 +103,7 @@ Returns information about the table, including the current status of the table, 
 For more info see [here][describeTableDocs]
 
 ``` js
-  dynode.describeTable("ExampleTable", console.log);
+  dynode.describeTable("ExampleTable", function (error, info));
 ```
 
 <a name="updateTable"></a>
