@@ -38,6 +38,8 @@ If you would prefer to manage your own client, potentially with different auth p
     accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"
   });
 ```
+## Callback Signature
+Callbacks return (error, [results], meta) where results are the returned data and meta is the extra information returned by DynamoDB
 
 ## API Documentation
 
@@ -103,7 +105,7 @@ Returns information about the table, including the current status of the table, 
 For more info see [here][describeTableDocs]
 
 ``` js
-  dynode.describeTable("ExampleTable", console.log);
+  dynode.describeTable("ExampleTable", function (error, info));
 ```
 
 <a name="updateTable"></a>
@@ -241,7 +243,7 @@ The Scan operation returns one or more items and its attributes by performing a 
     AttributesToGet : ["AttributeName1", "AttributeName2", "AttributeName3"]
   };
 
-  dynode.query("ExampleTable", opts, console.log);
+  dynode.scan("ExampleTable", opts, console.log);
 ```
 
 <a name="batchGetItem"></a>
@@ -257,7 +259,7 @@ The BatchGetItem operation returns the attributes for multiple items from multip
   dynode.batchGetItem(query, console.log);
 ```
 
-`scan` accepts any option that Amazon accepts.
+`batchGetItem` accepts any option that Amazon accepts.
 
 ``` js
   var filter = {
@@ -265,7 +267,7 @@ The BatchGetItem operation returns the attributes for multiple items from multip
     "AnotherTable": {keys:[{hash: "anotherKey", range: 123}], AttributesToGet :["brand", "price"]}
   }
 
-  dynode.query(filter, console.log);
+  dynode.batchGetItem(filter, console.log);
 ```
 
 ## Tests
