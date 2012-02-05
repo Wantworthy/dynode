@@ -429,6 +429,50 @@ describe("DynamoDB Client unit tests", function(){
       client.batchGetItem(options, done);
     });
 
+    it("should parse returned response to json", function(done){
+      var response = {
+        Responses :
+          { Table1 : {
+            Items:[
+              {"name": {"S":"Bob"},"Age": {"N":"22"} },
+              {"name": {"S":"Dan"},"Age": {"N":"66"} }
+            ],
+            ConsumedCapacityUnits : 1
+          },
+          Table2 : {
+            Items:[
+              {"brand": {"S":"Nike"},"price": {"N":"33.99"} },
+              {"brand": {"S":"Adidas"},"price": {"N":"22.99"} }
+            ],
+            ConsumedCapacityUnits : 4
+          }
+        }};
+
+      client._request = function(action, options, cb) {
+        cb(null, response);
+      };
+
+      var options = {
+        "Table1": {keys:[{hash: "blah"}, {hash: "moreBlah"}]},
+        "Table2": {keys:[{hash: "anotherKey", range: 123}]}
+      }
+
+      client.batchGetItem(options, function(err, resp, meta){
+        resp.Table1.should.have.lengthOf(2);
+        resp.Table1[0].should.eql({name: 'Bob', Age: 22});
+        resp.Table1[1].should.eql({name: 'Dan', Age: 66});
+
+        resp.Table2.should.have.lengthOf(2);
+        resp.Table2[0].should.eql({brand: 'Nike', price: 33.99});
+        resp.Table2[1].should.eql({brand: 'Adidas', price: 22.99});
+
+        meta.ConsumedCapacityUnits.Table1.should.equal(1);
+        meta.ConsumedCapacityUnits.Table2.should.equal(4);
+
+        done();
+      });
+    });
+
   });
 
 });
