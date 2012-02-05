@@ -68,16 +68,16 @@ describe('Dynode Integration Tests', function() {
 
     it('should update existing item and return its new values', function(done) {
       dynode.updateItem(DynamoDB.TestTable, "updateTest", {foo: "Bar"}, {ReturnValues: "UPDATED_NEW"}, function(err, resp) {
-        resp.Attributes.should.eql({ foo: { S: 'Bar' } });
+        resp.Attributes.should.eql({ foo: 'Bar' });
         done(err);
       });
     });
 
     it('should update existing Item by adding a number to a set of numbers', function(done) {
       dynode.updateItem(DynamoDB.TestTable, "update2", {nums: {add : [5]}, age: {add: 2}}, {ReturnValues: "UPDATED_NEW"}, function(err, resp) {
-        var nums = resp.Attributes.nums.NS.sort();
-        nums.should.eql(['1', '2', '3', '5']);
-        resp.Attributes.age.should.eql({'N' : '24'});
+        var nums = resp.Attributes.nums.sort();
+        nums.should.eql([1, 2, 3, 5]);
+        resp.Attributes.age.should.eql(24);
         done(err);
       });
     });
