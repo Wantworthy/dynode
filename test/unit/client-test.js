@@ -177,7 +177,7 @@ describe("DynamoDB Client unit tests", function(){
 
         options.AttributeUpdates.should.eql({"age":{"Value":{"N":"22"},"Action":"PUT"}});
 
-        cb();
+        cb(null, {ConsumedCapacityUnits: 1});
       };
 
       client.updateItem("TestTable", "My-Key", updates, done);
@@ -191,7 +191,7 @@ describe("DynamoDB Client unit tests", function(){
         options.TableName.should.equal("TestTable");
         options.Key.should.eql({HashKeyElement: { S :"My-Key"}, RangeKeyElement: { N :"123"} });
 
-        cb();
+        cb(null, {ConsumedCapacityUnits: 1});
       };
 
       client.updateItem("TestTable", {hash: "My-Key",range: 123} , updates, done);
@@ -206,10 +206,30 @@ describe("DynamoDB Client unit tests", function(){
         options.TableName.should.equal("TestTable");
         options.Expected.should.eql({"foo":{"Value":{"S":"bar"}}});
         
-        cb();
+        cb(null, {ConsumedCapacityUnits: 1});
       };
 
       client.updateItem("TestTable", "somekey" , updates, opts, done);
+    });
+
+    it('should parse returned Attributes to json', function(done) {
+      var updates = {age : 22};
+
+      client._request = function(action, options, cb) {        
+        cb(null, {ConsumedCapacityUnits: 1, 
+                  Attributes : {
+                    name : {"S":"Bob"}, age : {"N":"22"}
+                  }
+        });
+      };
+
+      client.updateItem("TestTable", "somekey" , updates, function(err, meta){
+        meta.Attributes.name.should.equal("Bob");
+        meta.Attributes.age.should.equal(22);
+        
+        done();  
+      });
+
     });
 
   });
