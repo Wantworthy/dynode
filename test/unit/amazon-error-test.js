@@ -27,6 +27,13 @@ describe("Amazon Error Handling", function() {
     err.statusCode.should.equal(400);
   });
 
+  it("should parse unknown type", function() {
+    var err = new AmazonError({statusCode: 400, type: null, message: 'The Error is unknown' });
+
+    err.type.should.equal("UnknownError");            
+    err.message.should.equal("The Error is unknown");
+    err.statusCode.should.equal(400);
+  });
 
   describe("Retry", function() {
     
