@@ -27,4 +27,27 @@ describe("Amazon Error Handling", function() {
     err.statusCode.should.equal(400);
   });
 
+
+  describe("Retry", function() {
+    
+    it("should be true for a ProvisionedThroughputExceededException exception", function() {
+      var err = new AmazonError({statusCode: 400, type: "com.amazonaws.dynamodb.v20111205#ProvisionedThroughputExceededException"});
+
+      err.retry.should.be.true;
+    });
+
+    it("should be true for a 500 error", function() {
+      var err = new AmazonError({statusCode: 500, type: "com.amazonaws.dynamodb.v20111205#InternalFailureException"});
+
+      err.retry.should.be.true;
+    });
+
+    it("should be false for a 400 error", function() {
+      var err = new AmazonError({statusCode: 400, type: "com.amazonaws.dynamodb.v20111205#InvalidParameterValueException"});
+
+      err.retry.should.be.false;
+    });
+
+  });
+
 });
