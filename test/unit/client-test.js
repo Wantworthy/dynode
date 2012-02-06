@@ -431,8 +431,8 @@ describe("DynamoDB Client unit tests", function(){
 
     it("should parse returned response to json", function(done){
       var response = {
-        Responses :
-          { Table1 : {
+        Responses :{ 
+          Table1 : {
             Items:[
               {"name": {"S":"Bob"},"Age": {"N":"22"} },
               {"name": {"S":"Dan"},"Age": {"N":"66"} }
