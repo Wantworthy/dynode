@@ -1,7 +1,7 @@
 {
   "name": "dynode",
   "description": "node.js driver for Amazon's DynamoDB",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "author": "Ryan Fitzgerald <ryan@codebrewstudios.com>",
   "repository": {
     "type": "git",
