@@ -48,6 +48,7 @@ Callbacks return (error, [results], meta) where results are the returned data an
 * [List Tables](#listTables)
 * [Describe Table](#describeTable)
 * [updateTable](#updateTable)
+* [deleteTable](#deleteTable)
 * [Put Item](#putItem)
 * [Update Item](#updateItem)
 * [Get Item](#getItem)
@@ -115,6 +116,15 @@ Updates the provisioned throughput for the given table. For more info see [here]
 
 ``` js
   dynode.updateTable("ExampleTable", {read: 15, write: 10}, console.log);
+```
+
+<a name="deleteTable"></a>
+## Delete Table
+
+Deletes a table and all of its items. For more info see [here][deleteTableDocs]
+
+``` js
+  dynode.deleteTable("ExampleTable", console.log);
 ```
 
 <a name="putItem"></a>
@@ -286,6 +296,7 @@ All tests are written with [mocha][0] and should be run with make:
 [listTablesDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_ListTables.html
 [describeTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DescribeTables.html
 [updateTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateTable.html
+[deleteTableDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_DeleteTable.html
 [putItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_PutItem.html
 [updateItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_UpdateItem.html
 [getItemDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_GetItem.html
