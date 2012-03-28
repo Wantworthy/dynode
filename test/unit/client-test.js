@@ -61,8 +61,8 @@ describe("DynamoDB Client unit tests", function(){
 
       client.describeTable("TestTable", done);
     });
-  });  
-  
+  });
+
   describe("List Tables", function() {
     it('should make request to list all tables', function(done) {
       client._request = function(action, options, cb) {
@@ -78,7 +78,7 @@ describe("DynamoDB Client unit tests", function(){
       client._request = function(action, options, cb) {
         action.should.equal("ListTables");
         options.should.eql({Limit: 4, ExclusiveStartTableName: "SomeTable"});
-        
+
         cb();
       };
 
@@ -112,7 +112,6 @@ describe("DynamoDB Client unit tests", function(){
 
       client.updateTable("UpdateThisTable",  {read: 5, write: 2}, done);
     });
-
   });
 
   describe("Put Item", function() {
@@ -136,10 +135,10 @@ describe("DynamoDB Client unit tests", function(){
       client._request = function(action, options, cb) {
         action.should.equal("PutItem");
         options.TableName.should.equal("TestTable");
-        
+
         options.Item.should.eql({
           id    : { N: '99' },
-          nums  : { NS: ['22', '33', '44']}, 
+          nums  : { NS: ['22', '33', '44']},
           terms : { SS: ["foo", "bar", "baz"]}
         });
 
@@ -157,7 +156,7 @@ describe("DynamoDB Client unit tests", function(){
         options.TableName.should.equal("TestTable");
         options.ReturnValues.should.equal("ALL_OLD");
         options.Item.should.eql({id: { S: 'blah' }});
-        
+
         cb();
       };
 
@@ -205,7 +204,7 @@ describe("DynamoDB Client unit tests", function(){
         action.should.equal("UpdateItem");
         options.TableName.should.equal("TestTable");
         options.Expected.should.eql({"foo":{"Value":{"S":"bar"}}});
-        
+
         cb(null, {ConsumedCapacityUnits: 1});
       };
 
@@ -215,8 +214,8 @@ describe("DynamoDB Client unit tests", function(){
     it('should parse returned Attributes to json', function(done) {
       var updates = {age : 22};
 
-      client._request = function(action, options, cb) {        
-        cb(null, {ConsumedCapacityUnits: 1, 
+      client._request = function(action, options, cb) {
+        cb(null, {ConsumedCapacityUnits: 1,
                   Attributes : {
                     name : {"S":"Bob"}, age : {"N":"22"}
                   }
@@ -226,8 +225,26 @@ describe("DynamoDB Client unit tests", function(){
       client.updateItem("TestTable", "somekey" , updates, function(err, meta){
         meta.Attributes.name.should.equal("Bob");
         meta.Attributes.age.should.equal(22);
-        
-        done();  
+
+        done();
+      });
+
+    });
+
+	it('should handle errors from client._request', function(done) {
+      var updates = { friends : ["paul", "john", "ringo", "george", "paul"] };
+	  var awsError = new Error("One or more parameter values were invalid: Input collection friends contains duplicates.");
+
+      client._request = function(action, options, cb) {
+        cb(awsError);
+      };
+
+      client.updateItem("TestTable", "somekey" , updates, function(err, meta) {
+        should.not.exist(meta);
+        should.exist(err);
+        err.should.equal(awsError);
+
+        done();
       });
 
     });
@@ -346,7 +363,7 @@ describe("DynamoDB Client unit tests", function(){
         options.TableName.should.eql("QueryTable");
         options.RangeKeyCondition.should.eql({"AttributeValueList":[{"N":"AttributeValue2"}],"ComparisonOperator":"GT"});
         options.Limit.should.equal(13);
-        
+
         cb();
       };
 
@@ -431,7 +448,7 @@ describe("DynamoDB Client unit tests", function(){
 
     it("should parse returned response to json", function(done){
       var response = {
-        Responses :{ 
+        Responses :{
           Table1 : {
             Items:[
               {"name": {"S":"Bob"},"Age": {"N":"22"} },
