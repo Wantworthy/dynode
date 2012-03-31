@@ -152,7 +152,26 @@ describe('Dynode Integration Tests', function() {
       });
 
     });
+  });
 
+  describe('HTTPS', function(){
+
+    before(function(done){
+      dynode.auth({
+        https : true,
+        accessKeyId: process.env.AWS_ACCEESS_KEY_ID, 
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+      });
+
+      DynamoDB.createProducts(DynamoDB.products, done);
+    });
+
+    it("should use https when passing setting https to true in config", function(done){
+      dynode.scan(DynamoDB.TestTable, function(err, items, meta) {
+        items.should.have.length(meta.Count);
+        done(err);
+      });
+    });
   });
 
 });

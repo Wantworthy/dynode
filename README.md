@@ -44,6 +44,7 @@ Callbacks return (error, [results], meta) where results are the returned data an
 ## API Documentation
 
 * [Auth](#auth)
+* [HTTPS](#https)
 * [Create Table](#createTable)
 * [List Tables](#listTables)
 * [Describe Table](#describeTable)
@@ -64,6 +65,16 @@ Before you can perform any operations on DynamoDB you need to provide your Amazo
 
 ``` js
   dynode.auth({accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"});
+```
+
+<a name="https"></a>
+## HTTPS
+
+To use HTTPS for connecting to DynamoDB pass in the https option
+by default dynode will use HTTP
+
+``` js
+  dynode.auth({https: true, accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"});
 ```
 
 <a name="createTable"></a>
