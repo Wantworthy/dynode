@@ -1,6 +1,8 @@
 REPORTER = spec
 ui = bdd
-VERSION := $(shell cat package.json | grep version | grep -o '[0-9]\.[0-9]\.[0-9]')
+VERSION := $(shell cat package.json | grep version | grep -o -E '[0-9]+\.[0-9]+\.[0-9]+')
+UNITTESTFILES := $(shell find test/unit -name '*-test.js')
+INTEGRATIONTESTFILES := $(shell find test/integration -name '*-test.js')
 
 test: test-unit
 	
@@ -11,14 +13,14 @@ test-unit:
 		--ui $(ui) \
 		--reporter $(REPORTER) \
 		--require should \
-		test/unit/*-test.js
+		$(UNITTESTFILES)
 
 test-integration:
 	@./node_modules/.bin/mocha \
 		--ui $(ui) \
 		--reporter $(REPORTER) \
 		--require should \
-		test/integration/*-test.js
+		$(INTEGRATIONTESTFILES)
 
 test-spec:
 	@./node_modules/.bin/mocha \
@@ -26,7 +28,7 @@ test-spec:
 		--reporter spec \
 		--require should \
 		--grep "$(grep)" \
-		test/unit/*-test.js test/integration/*-test.js
+		$(UNITTESTFILES) $(INTEGRATIONTESTFILES)
 
 release:
 	git tag -a v$(VERSION) -m 'release version $(VERSION)'
