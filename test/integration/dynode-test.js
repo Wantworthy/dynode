@@ -62,7 +62,8 @@ describe('Dynode Integration Tests', function() {
     before(function(done) {
       DynamoDB.createProducts([
         {id: "updateTest", foo: "baz"}, 
-        {id: "update2", nums: [1,2,3], age: 22}
+        {id: "update2", nums: [1,2,3], age: 22},
+        {id: "update3", foo: "bar", age: 22}
       ], done);
     });
 
@@ -78,6 +79,14 @@ describe('Dynode Integration Tests', function() {
         var nums = resp.Attributes.nums.sort();
         nums.should.eql([1, 2, 3, 5]);
         resp.Attributes.age.should.eql(24);
+        done(err);
+      });
+    });
+
+    it('should delete age attribute', function(done) {
+      dynode.updateItem(DynamoDB.TestTable, "update3", {age: {'Action' : "DELETE"}}, {ReturnValues: "ALL_NEW"}, function(err, resp) {
+        resp.Attributes.should.eql({ id: 'update3', foo: 'bar' });
+        should.not.exist(resp.Attributes.age);
         done(err);
       });
     });

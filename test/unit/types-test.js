@@ -148,13 +148,21 @@ describe('Types', function() {
 
     });
 
-    it("converts to delete schema", function(){
+    it("converts to subtract number schema", function(){
       var json = Types.updateAttributes({age: {delete: 4}});
       
       json.should.eql({
         "age":{"Value":{"N":"4"},"Action":"DELETE"}
       });
 
+    });
+
+    it("converts to delete attribute schema", function(){
+      var json = Types.updateAttributes({age: {Action: 'DELETE'}});
+      
+      json.should.eql({
+        "age":{"Action":"DELETE"}
+      });
     });
 
     it("converts to put schema", function(){
