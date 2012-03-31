@@ -36,11 +36,11 @@ describe('Types', function() {
       converted.should.eql({"foo":{"NS":['123']}});
     });
 
-    it("converts date to a string", function() {
+    it("converts date to a string using its toJSON method", function() {
       var date = new Date,
           converted = Types.stringify({foo : date});
 
-      converted.should.eql({"foo":{"S":date.toString()}});
+      converted.should.eql({"foo":{"S":date.toJSON()}});
     });
 
   });
