@@ -70,8 +70,7 @@ Before you can perform any operations on DynamoDB you need to provide your Amazo
 <a name="https"></a>
 ## HTTPS
 
-To use HTTPS for connecting to DynamoDB pass in the https option
-by default dynode will use HTTP
+To use HTTPS for connecting to DynamoDB pass in the https option, by default dynode will use HTTP
 
 ``` js
   dynode.auth({https: true, accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"});
@@ -175,6 +174,14 @@ Perform specific action to perform for the given update
 
 ``` js
   var updates = {nums: {'delete' : [5]}, age: {add: 2}};
+
+  dynode.updateItem("ExampleTable", "ItemsHashKey", updates, console.log);
+```
+
+Delete the attribute from an existing item
+
+``` js
+  var updates = {age: {'Action' : 'DELETE'}};
 
   dynode.updateItem("ExampleTable", "ItemsHashKey", updates, console.log);
 ```
