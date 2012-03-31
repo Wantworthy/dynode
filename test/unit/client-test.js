@@ -232,6 +232,20 @@ describe("DynamoDB Client unit tests", function(){
 
     });
 
+    it('should handle null metadata', function(done) {
+      var updates = {age : 22};
+
+      client._request = function(action, options, cb) {
+        action.should.equal("UpdateItem");
+        options.TableName.should.equal("TestTable");
+        options.Key.should.eql({HashKeyElement: { S :"My-Key"}, RangeKeyElement: { N :"123"} });
+
+        cb(null, null);
+      };
+
+      client.updateItem("TestTable", {hash: "My-Key",range: 123} , updates, done);
+    });
+
   });
 
   describe("Get Item", function() {
