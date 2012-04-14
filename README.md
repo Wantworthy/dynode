@@ -44,6 +44,7 @@ Callbacks return (error, [results], meta) where results are the returned data an
 ## API Documentation
 
 * [Auth](#auth)
+* [Table Name Prefix](#tableNamePrefix)
 * [HTTPS](#https)
 * [Create Table](#createTable)
 * [List Tables](#listTables)
@@ -65,6 +66,23 @@ Before you can perform any operations on DynamoDB you need to provide your Amazo
 
 ``` js
   dynode.auth({accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"});
+```
+
+<a name="tableNamePrefix"></a>
+## Table Name Prefix
+
+dynode client takes an optional tableNamePrefix in order to support running in different environments such as dev, testing, production  
+
+``` js
+  var client = new (dynode.Client)({
+    accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey", tableNamePrefix: "Dev_"
+  });
+```
+
+Now all operations will be performed against tables starting with that prefix, for example
+
+``` js
+  client.createTable("NewTable", console.log); // will create table named 'Dev_NewTable'
 ```
 
 <a name="https"></a>

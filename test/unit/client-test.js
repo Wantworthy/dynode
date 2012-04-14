@@ -504,4 +504,143 @@ describe("DynamoDB Client unit tests", function(){
 
   });
 
+  
+  describe("Table Name Prefix", function() {
+    var prefixClient,mockRequest;
+
+    beforeEach(function() {
+      prefixClient = new Client({accessKeyId :"MockId", secretAccessKey: "MockKey", tableNamePrefix : "Test_"});
+      mockRequest = prefixClient.request = {};
+    });
+
+    it('should prefix table name for put item request', function(done) {
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("PutItem");
+        options.TableName.should.equal("Test_SomeTable");
+        cb();
+      };
+
+      prefixClient.putItem("SomeTable", {id : "Foo", age : 22}, done);
+    });
+
+    it('should prefix table name for update item request', function(done) {
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("UpdateItem");
+        options.TableName.should.equal("Test_SomeTable");
+        cb();
+      };
+
+      prefixClient.updateItem("SomeTable", "My-Key", {age : 22}, done);
+    });
+
+    it('should prefix table name for get item request', function(done) {
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("GetItem");
+        options.TableName.should.equal("Test_SomeTable");
+        done();
+      };
+
+      prefixClient.getItem("SomeTable", "My-Key");
+    });
+
+    it("should prefix table name for delete item request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("DeleteItem");
+        options.TableName.should.equal("Test_SomeTable");
+        cb(null, {});
+      };
+
+      prefixClient.deleteItem("SomeTable", "somekey", done);
+    });
+
+    it("should prefix table name for query request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("Query");
+        options.TableName.should.equal("Test_QueryTable");
+        done();
+      };
+
+      prefixClient.query("QueryTable", "somekey");
+    });
+
+    it("should prefix table name for scan request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("Scan");
+        options.TableName.should.equal("Test_ScanTable");
+        done();
+      };
+
+      prefixClient.scan("ScanTable", {Limit : 2});
+    });
+
+    it("should prefix table name for batch get item request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        var request = options.RequestItems;
+        action.should.equal("BatchGetItem");
+        Object.keys(request).should.eql(['Test_BatchTable', 'Test_AnotherBatchTable']);
+
+        request.Test_BatchTable.Keys.should.eql([{"HashKeyElement": {"S":"blah"}}, {"HashKeyElement": {"S":"moreBlah"}} ]);
+        request.Test_AnotherBatchTable.Keys.should.eql([{"HashKeyElement": {"S":"anotherKey"}, "RangeKeyElement":{"N":"123"}} ]);
+        done();
+      };
+
+      var options = {
+        "BatchTable": {keys:[{hash: "blah"}, {hash: "moreBlah"}]},
+        "AnotherBatchTable": {keys:[{hash: "anotherKey", range: 123}]}
+      };
+
+      prefixClient.batchGetItem(options);
+    });
+
+    it("should prefix table name for create table request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("CreateTable");
+        options.TableName.should.equal("Test_CreateThisTable");
+        done();
+      };
+
+      prefixClient.createTable("CreateThisTable", done);
+    });
+
+    it("should prefix table name for update table request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("UpdateTable");
+        options.TableName.should.equal("Test_UpdateThisTable");
+        cb();
+      };
+
+      prefixClient.updateTable("UpdateThisTable", {read: 5, write: 2}, done);
+    });
+
+    it("should prefix table name for delete table request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("DeleteTable");
+        options.TableName.should.equal("Test_DeleteThisTable");
+        cb();
+      };
+
+      prefixClient.deleteTable("DeleteThisTable", done);
+    });
+
+    it("should prefix table name for describe table request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("DescribeTable");
+        options.TableName.should.equal("Test_DescribeThisTable");
+        cb(null, {});
+      };
+
+      prefixClient.describeTable("DescribeThisTable", done);
+    });
+
+    it("should prefix table name for list tables request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        action.should.equal("ListTables");
+        options.should.eql({Limit: 4, ExclusiveStartTableName: "Test_SomeTable"});
+        cb();
+      };
+
+      prefixClient.listTables({Limit: 4, ExclusiveStartTableName: "SomeTable"}, done);
+    });
+
+  });
 });
