@@ -63,7 +63,8 @@ describe('Dynode Integration Tests', function() {
       DynamoDB.createProducts([
         {id: "updateTest", foo: "baz"}, 
         {id: "update2", nums: [1,2,3], age: 22},
-        {id: "update3", foo: "bar", age: 22}
+        {id: "update3", foo: "bar", age: 22},
+        {id: "update4", foo: "blah", age: 99, nums : [4,5,6], lname : 'tester'}
       ], done);
     });
 
@@ -87,6 +88,16 @@ describe('Dynode Integration Tests', function() {
       dynode.updateItem(DynamoDB.TestTable, "update3", {age: {'Action' : "DELETE"}}, {ReturnValues: "ALL_NEW"}, function(err, resp) {
         resp.Attributes.should.eql({ id: 'update3', foo: 'bar' });
         should.not.exist(resp.Attributes.age);
+        done(err);
+      });
+    });
+
+    it('should delete attributes', function(done) {
+      dynode.updateItem(DynamoDB.TestTable, "update4", {age: null, nums : [], lname : ''}, {ReturnValues: "ALL_NEW"}, function(err, resp) {
+        resp.Attributes.should.eql({ id: 'update4', foo: 'blah' });
+        should.not.exist(resp.Attributes.age);
+        should.not.exist(resp.Attributes.nums);
+        should.not.exist(resp.Attributes.lname);
         done(err);
       });
     });

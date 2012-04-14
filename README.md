@@ -186,6 +186,15 @@ Delete the attribute from an existing item
   dynode.updateItem("ExampleTable", "ItemsHashKey", updates, console.log);
 ```
 
+DynamoDB doesn't allow empty strings or empty sets
+updateItem will delete attributes when passing in null, empty string, or empty array
+
+``` js
+  var updates = {age: null, nums: [], fullname: ''};
+
+  dynode.updateItem("ExampleTable", "ItemsHashKey", updates, console.log);
+```
+
 `updateItem` accepts options which lets you pass in any option that Amazon accepts.
 
 ``` js

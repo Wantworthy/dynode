@@ -246,6 +246,21 @@ describe("DynamoDB Client unit tests", function(){
       client.updateItem("TestTable", {hash: "My-Key",range: 123} , updates, done);
     });
 
+    it('should parse nulls into delete statements', function(done) {
+      var updates = {age : null, nums : []};
+
+      client._request = function(action, options, cb) {
+        action.should.equal("UpdateItem");
+        options.TableName.should.equal("TestTable");
+        options.Key.should.eql({HashKeyElement: { S :"My-Key"}});
+        options.AttributeUpdates.should.eql({"age":{"Action":"DELETE"}, "nums":{"Action":"DELETE"}});
+
+        cb(null, null);
+      };
+
+      client.updateItem("TestTable", "My-Key" , updates, done);
+    });
+
   });
 
   describe("Get Item", function() {

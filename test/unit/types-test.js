@@ -165,6 +165,30 @@ describe('Types', function() {
       });
     });
 
+    it("converts empty string to delete action", function(){
+      var json = Types.updateAttributes({age: ""});
+      
+      json.should.eql({
+        "age":{"Action":"DELETE"}
+      });
+    });
+
+    it("converts null to delete action", function(){
+      var json = Types.updateAttributes({age: null});
+      
+      json.should.eql({
+        "age":{"Action":"DELETE"}
+      });
+    });
+
+    it("converts empty array to delete action", function(){
+      var json = Types.updateAttributes({nums: []});
+      
+      json.should.eql({
+        "nums":{"Action":"DELETE"}
+      });
+    });
+
     it("converts to put schema", function(){
       var json = Types.updateAttributes({age: {put: 4}});
       
