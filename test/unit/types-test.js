@@ -1,6 +1,6 @@
 var Types = require("../../lib/dynode/types"),
     util = require('util'),
-    should = require('should');
+    should = require('chai').should();
 
 describe('Types', function() {
 

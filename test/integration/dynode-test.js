@@ -1,7 +1,7 @@
 var dynode = require("../../lib/dynode"),
     DynamoDB = require('../test-helper'),
     util = require('utile'),
-    should = require('should');
+    should = require('chai').should();
 
 describe('Dynode Integration Tests', function() {
 

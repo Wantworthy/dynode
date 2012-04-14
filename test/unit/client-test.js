@@ -1,6 +1,6 @@
 var Client = require("../../lib/dynode/client").Client,
     util = require('utile'),
-    should = require('should');
+    should = require('chai').should();
 
 describe("DynamoDB Client unit tests", function(){
   var realRequest,

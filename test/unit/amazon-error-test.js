@@ -1,5 +1,5 @@
 var AmazonError = require("../../lib/dynode/amazon-error"),
-    should = require('should');
+    should = require('chai').should();
 
 describe("Amazon Error Handling", function() {
   

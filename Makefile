@@ -12,21 +12,18 @@ test-unit:
 	@./node_modules/.bin/mocha \
 		--ui $(ui) \
 		--reporter $(REPORTER) \
-		--require should \
 		$(UNITTESTFILES)
 
 test-integration:
 	@./node_modules/.bin/mocha \
 		--ui $(ui) \
 		--reporter $(REPORTER) \
-		--require should \
 		$(INTEGRATIONTESTFILES)
 
 test-spec:
 	@./node_modules/.bin/mocha \
 		--ui bdd \
 		--reporter spec \
-		--require should \
 		--grep "$(grep)" \
 		$(UNITTESTFILES) $(INTEGRATIONTESTFILES)
 
