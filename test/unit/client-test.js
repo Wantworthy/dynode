@@ -516,7 +516,36 @@ describe("DynamoDB Client unit tests", function(){
 
   });
 
-  
+  describe("BatchWriteItem", function() {
+    it("should make batch item request with given keys", function(done){
+      client._request = function(action, options, cb) {
+        var request = options.RequestItems;
+        action.should.equal("BatchWriteItem");
+
+        request.BatchTable[0].should.eql({PutRequest : {"Item" : {id : {'S' : 'foo'}, name : {'S' : 'bar'} } }});
+        request.BatchTable[1].should.eql({DeleteRequest : {"Key" : {HashKeyElement : {'S' : 'hash-key'}} }});
+
+        request.AnotherTable[0].DeleteRequest.should.eql({"Key" : {HashKeyElement : {'S' : 'somekey'}, RangeKeyElement : {'S' : 'foo'}} });
+        request.AnotherTable[1].DeleteRequest.should.eql({"Key" : {HashKeyElement : {'S' : 'another key'}, RangeKeyElement : {'S' : 'moar foo'}} });
+
+        cb(null, {});
+      };
+
+      var options = {
+        "BatchTable": [
+          {put : {id : "foo", name: "bar"}},
+          {del : "hash-key"}
+        ],
+        "AnotherTable": [
+          {del : {hash: "somekey", range: "foo"}},
+          {del : {hash: "another key", range: "moar foo"}}
+        ]
+      };
+
+      client.batchWriteItem(options, done);
+    });
+
+  });
   describe("Table Name Prefix", function() {
     var prefixClient,mockRequest;
 
