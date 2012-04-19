@@ -344,7 +344,7 @@ note - This api is not provided directly by DynamoDB.
     throughputPercent : 0.5 // attempt to only consume 50% of write capacity, defaults to 100%
   };
 
-  dynode.truncate("ExampleTable, options, console.log);
+  dynode.truncate("ExampleTable", options, console.log);
 ```
 
 #### Author: [Ryan Fitzgerald](http://twitter.com/#!/TheRyanFitz)
