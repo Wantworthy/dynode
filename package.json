@@ -1,7 +1,7 @@
 {
   "name": "dynode",
   "description": "node.js client for Amazon's DynamoDB",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "author": "Ryan Fitzgerald <ryan@codebrewstudios.com>",
   "repository": {
     "type": "git",
