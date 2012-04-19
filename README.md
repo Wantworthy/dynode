@@ -58,6 +58,7 @@ Callbacks return (error, [results], meta) where results are the returned data an
 * [Query](#query)
 * [Scan](#scan)
 * [Batch Get Item](#batchGetItem)
+* [Truncate](#truncate)
 
 <a name="auth"></a>
 ## Auth
@@ -330,6 +331,20 @@ All tests are written with [mocha][0] and should be run with make:
 
 ``` bash
   $ make test
+```
+
+<a name="truncate"></a>
+## Truncate
+The Truncate operation will scan all items currently in the given table and remove them one by one.
+This has the potential to use up your write capacity, so use this call with care.
+note - This api is not provided directly by DynamoDB.
+
+``` js
+  var options = {
+    throughputPercent : 0.5 // attempt to only consume 50% of write capacity, defaults to 100%
+  };
+
+  dynode.truncate("ExampleTable, options, console.log);
 ```
 
 #### Author: [Ryan Fitzgerald](http://twitter.com/#!/TheRyanFitz)
