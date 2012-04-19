@@ -160,6 +160,33 @@ describe('Dynode Integration Tests', function() {
 
   });
 
+  describe("Truncate", function(){
+    before(function(done) {
+      this.timeout(0);
+      var products = [];
+      
+      for(var i = 0; i <= 10; i++) {
+        products.push({id: "prod-"+i, foo: "bar-" +i});
+      }
+
+      DynamoDB.createProducts(products, done);
+    });
+
+    it("should remove all items from table", function(done){
+      this.timeout(0);
+
+      dynode.truncate(DynamoDB.TestTable, function(err){
+        
+        dynode.getItem(DynamoDB.TestTable, 'prod-1', function(err, item){
+          should.not.exist(err);
+          should.not.exist(item);
+          done();
+        });
+
+      });
+    });
+  });
+
   describe("Error Handling", function(){
 
     it("should return error for non existant table", function(done) {
