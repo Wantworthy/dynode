@@ -53,7 +53,15 @@ describe('Dynode Integration Tests', function() {
         meta.ConsumedCapacityUnits.should.equal(0.5);
         done(err);
       });
+    });
 
+    it('should return null for not found item', function(done) {
+      dynode.getItem("TestTable", "ThisKeyDoesntExist", function(err, item, meta) {
+        should.not.exist(err);
+        should.not.exist(item);
+        meta.ConsumedCapacityUnits.should.equal(0.5);
+        done(err);
+      });
     });
   });
 

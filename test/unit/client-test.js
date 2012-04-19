@@ -300,7 +300,19 @@ describe("DynamoDB Client unit tests", function(){
       };
 
       client.getItem("TestTable", "somekey",{ConsistentRead: true, "AttributesToGet":["name","age"],}, done);
+    });
 
+    it("should return null when item for given key doesnt exist", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("GetItem");
+        
+        cb(null, {Item : {}});
+      };
+
+      client.getItem("TestTable", "doesnt-exist-key", function(err, item){
+        should.not.exist(item);
+        done();
+      });
     });
 
   });
