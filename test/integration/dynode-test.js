@@ -160,6 +160,31 @@ describe('Dynode Integration Tests', function() {
 
   });
 
+  describe("Batch Write Item", function(){
+    before(function(done) {
+      DynamoDB.createProducts([
+        {id: "batch1", foo: "baz"}, 
+        {id: "batch2", nums: [1,2,3], age: 22},
+        {id: "batch3", foo: "bar", age: 22},
+        {id: "batch4", foo: "blah", age: 99, nums : [4,5,6], lname : 'tester'}
+      ], done);
+    });
+
+    it("should update all items", function(done){
+      var writes = {};
+      writes[DynamoDB.TestTable] = [
+        {put : {id : "batch1", foo: "new foo"}},
+        {del : "batch2"},
+        {del : "batch3"}
+      ];
+
+      dynode.batchWriteItem(writes, function(err, resp){
+        should.not.exist(err);
+        done();
+      });
+
+    });
+  });
   describe("Truncate", function(){
     before(function(done) {
       this.timeout(0);
