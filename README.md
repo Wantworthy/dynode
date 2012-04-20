@@ -58,6 +58,7 @@ Callbacks return (error, [results], meta) where results are the returned data an
 * [Query](#query)
 * [Scan](#scan)
 * [Batch Get Item](#batchGetItem)
+* [Batch Write Item](#batchWriteItem)
 * [Truncate](#truncate)
 
 <a name="auth"></a>
@@ -326,11 +327,23 @@ The BatchGetItem operation returns the attributes for multiple items from multip
   dynode.batchGetItem(filter, console.log);
 ```
 
-## Tests
-All tests are written with [mocha][0] and should be run with make:
+<a name="batchWriteItem"></a>
+## Batch Write Item
+The BatchWriteItem operation This operation enables you to put or delete several items across multiple tables in a single API call. For more info see [here][batchWriteDocs]
 
-``` bash
-  $ make test
+``` js
+  var writes = {
+    "BatchTable": [
+      {put : {id : "foo", name: "bar"}},
+      {del : "hash-key"}
+    ],
+    "AnotherTable": [
+      {del : {hash: "somekey", range: "foo"}},
+      {del : {hash: "another key", range: "moar foo"}}
+    ]
+  };
+
+  dynode.batchWriteItem(writes, console.log);
 ```
 
 <a name="truncate"></a>
@@ -345,6 +358,13 @@ note - This api is not provided directly by DynamoDB.
   };
 
   dynode.truncate("ExampleTable", options, console.log);
+```
+
+## Tests
+All tests are written with [mocha][0] and should be run with make:
+
+``` bash
+  $ make test
 ```
 
 #### Author: [Ryan Fitzgerald](http://twitter.com/#!/TheRyanFitz)
@@ -364,3 +384,4 @@ note - This api is not provided directly by DynamoDB.
 [queryDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_Query.html
 [scanDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_Scan.html
 [batchGetDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_BatchGetItems.html
+[batchWriteDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_BatchWriteItems.html
