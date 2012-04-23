@@ -712,9 +712,9 @@ describe("DynamoDB Client unit tests", function(){
 
     it("strips unprocessed items table names", function(){
       var resp = {
-        "Responses":{"Dev_Thread":{"ConsumedCapacityUnits":1.0},"Dev_Reply":{"ConsumedCapacityUnits":1.0}},
+        "Responses":{"Test_Thread":{"ConsumedCapacityUnits":1.0},"Test_Reply":{"ConsumedCapacityUnits":1.0}},
         "UnprocessedItems":{
-          "Dev_Reply":[{"DeleteRequest":{"Key":{"HashKeyElement":{"S":"Amazon DynamoDB#DynamoDB Thread 4"}}}}]
+          "Test_Reply":[{"DeleteRequest":{"Key":{"HashKeyElement":{"S":"Amazon DynamoDB#DynamoDB Thread 4"}}}}]
         }
       }
 
