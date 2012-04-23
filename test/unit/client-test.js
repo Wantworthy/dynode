@@ -701,4 +701,27 @@ describe("DynamoDB Client unit tests", function(){
     });
 
   });
+
+  describe("Remove Table Name Prefix", function(){
+    var prefixClient,mockRequest;
+
+    beforeEach(function() {
+      prefixClient = new Client({accessKeyId :"MockId", secretAccessKey: "MockKey", tableNamePrefix : "Test_"});
+      mockRequest = prefixClient.request = {};
+    });
+
+    it("strips unprocessed items table names", function(){
+      var resp = {
+        "Responses":{"Dev_Thread":{"ConsumedCapacityUnits":1.0},"Dev_Reply":{"ConsumedCapacityUnits":1.0}},
+        "UnprocessedItems":{
+          "Dev_Reply":[{"DeleteRequest":{"Key":{"HashKeyElement":{"S":"Amazon DynamoDB#DynamoDB Thread 4"}}}}]
+        }
+      }
+
+      var stripped = prefixClient._removeTableNamePrefix(resp);
+      stripped.Responses.should.eql({"Thread":{"ConsumedCapacityUnits":1.0},"Reply":{"ConsumedCapacityUnits":1.0}});
+      stripped.UnprocessedItems.Reply.should.eql([{"DeleteRequest":{"Key":{"HashKeyElement":{"S":"Amazon DynamoDB#DynamoDB Thread 4"}}}}]);
+    });
+  });
 });
+
