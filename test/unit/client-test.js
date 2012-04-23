@@ -633,6 +633,23 @@ describe("DynamoDB Client unit tests", function(){
       prefixClient.batchGetItem(options);
     });
 
+    it("should prefix table name for batch write item request", function(done){
+      mockRequest.send = function(action, options, cb) {
+        var request = options.RequestItems;
+        action.should.equal("BatchWriteItem");
+        Object.keys(request).should.eql(['Test_BatchTable', 'Test_AnotherBatchTable']);
+
+        done();
+      };
+
+      var options = {
+        "BatchTable": [{put : {id : "foo", name: "bar"}},{del : "hash-key"}],
+        "AnotherBatchTable": [{del : "anotherkey"}]
+      };
+
+      prefixClient.batchWriteItem(options);
+    });
+
     it("should prefix table name for create table request", function(done){
       mockRequest.send = function(action, options, cb) {
         action.should.equal("CreateTable");
