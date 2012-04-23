@@ -201,13 +201,12 @@ describe('Dynode Integration Tests', function() {
       this.timeout(0);
 
       dynode.truncate(DynamoDB.TestTable, function(err){
-        
-        dynode.getItem(DynamoDB.TestTable, 'prod-1', function(err, item){
+
+        dynode.getItem(DynamoDB.TestTable, 'prod-1', {ConsistentRead : true}, function(err, item){
           should.not.exist(err);
           should.not.exist(item);
           done();
         });
-
       });
     });
   });

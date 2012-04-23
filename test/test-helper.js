@@ -14,7 +14,21 @@ DB.start = function(callback) {
 DB.createProducts = function(products, callback) {
   if(!Array.isArray(products)) products = [products];
 
-  async.forEach(products, DB.createProduct, callback);
+  var batchWrites = [];
+  var i,j,chunk = 25;
+
+  for (i=0,j=products.length; i<j; i+=chunk) {
+    var chunks = products.slice(i,i+chunk);
+
+    var writes = {};
+    writes[DB.TestTable] = chunks.map(function(p){
+      return {put : p};
+    });
+
+    batchWrites.push(async.apply(client.batchWriteItem.bind(client), writes));
+  }
+
+  async.parallel(batchWrites, callback);
 };
 
 DB.createProduct = function(product, cb) {
