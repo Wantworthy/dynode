@@ -35,9 +35,16 @@ describe('Dynode Integration Tests', function() {
 
     it('should create new item', function(done) {
       dynode.putItem("TestTable", {id : "Blah", foo: "Bar", num: 123, baz : ["a", "b", "c"]}, function(err, resp) {
-        done(err);   
+        should.not.exist(err);
+        done();
       });
+    });
 
+    it('should create item with unicode characters', function(done) {
+      dynode.putItem("TestTable", {id : "another", uni: "München"}, function(err, resp) {
+        should.not.exist(err);
+        done(err);
+      });
     });
   });
 
