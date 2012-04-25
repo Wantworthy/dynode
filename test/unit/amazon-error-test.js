@@ -14,9 +14,9 @@ describe("Amazon Error Handling", function() {
 
   it("should have custom to string", function(){
     var err = new AmazonError({statusCode: 400, type: "com.amazonaws.dynamodb.v20111205#InvalidParameterValueException", 
-                              message: "One or more parameter values were invalid"});
+                              message: "One or more parameter values were invalid", action: 'putItem'});
 
-    err.toString().should.equal("AmazonError - 400 InvalidParameterValueException: One or more parameter values were invalid");
+    err.toString().should.equal("AmazonError - putItem 400 InvalidParameterValueException: One or more parameter values were invalid");
   });
 
   it("should parse error message from amazons service token service", function() {
