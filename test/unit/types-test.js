@@ -43,6 +43,12 @@ describe('Types', function() {
       converted.should.eql({"foo":{"S":date.toJSON()}});
     });
 
+    it("remove empty string values", function() {
+      var converted = Types.stringify({foo : "Bar", name : "", args : ['']});
+
+      converted.should.eql({"foo":{"S":"Bar"}});
+    });
+
   });
 
   describe("toKeys", function() {

@@ -46,6 +46,14 @@ describe('Dynode Integration Tests', function() {
         done(err);
       });
     });
+
+    it('should create item without empty string attributes', function(done) {
+      dynode.putItem("TestTable", {id : "more", name :"", strings: [""] }, function(err, resp) {
+        should.not.exist(err);
+        console.log(resp);
+        done(err);
+      });
+    });
   });
 
   describe("Get Item", function() {
