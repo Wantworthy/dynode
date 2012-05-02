@@ -49,6 +49,12 @@ describe('Types', function() {
       converted.should.eql({"foo":{"S":"Bar"}});
     });
 
+    it("does not remove number 0", function() {
+      var converted = Types.stringify({foo : "Bar", count : 0});
+
+      converted.should.eql({"foo":{"S":"Bar"}, "count" : {"N":"0"}});
+    });
+
   });
 
   describe("toKeys", function() {

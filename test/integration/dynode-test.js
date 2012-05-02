@@ -48,10 +48,18 @@ describe('Dynode Integration Tests', function() {
     });
 
     it('should create item without empty string attributes', function(done) {
-      dynode.putItem("TestTable", {id : "more", name :"", strings: [""] }, function(err, resp) {
+      dynode.putItem("TestTable", {id : "more", name :"", strings: [""], count: 0 }, function(err, resp) {
         should.not.exist(err);
-        console.log(resp);
-        done(err);
+
+        dynode.getItem("TestTable", "more", {ConsistentRead : true}, function(err, item){
+          should.not.exist(err);
+          should.not.exist(item.name);
+          should.not.exist(item.strings);
+
+          item.should.eql({id : 'more', count : 0});
+          done(err);
+        });
+
       });
     });
   });
