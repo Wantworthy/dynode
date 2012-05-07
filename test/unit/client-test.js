@@ -367,6 +367,27 @@ describe("DynamoDB Client unit tests", function(){
       };
 
       client.query("QueryTable", "my-key", done);
+    });    
+
+    it("should convert returned items to json", function(done){
+      client._request = function(action, options, cb) {
+        action.should.equal("Query");
+        options.TableName.should.eql("QueryTable");
+        options.HashKeyValue.should.eql({"N":"12345"});
+
+        cb(null, 
+          { ConsumedCapacityUnits: 0.5, Count: 2, Items:
+            [ { name: { S: 'bday' }, accountID: { N: '12345' } },
+              { name: { S: 'summer' }, accountID: { N: '12345' } } ] });
+      };
+
+      client.query("QueryTable", 12345, function (err, resp) {
+        should.not.exist(err);
+
+        resp.Items[0].should.eql({name : 'bday', accountID: 12345});
+        resp.Items[1].should.eql({name : 'summer', accountID: 12345});
+        done()
+      });
     });
 
     it("should make query request with number hash key", function(done){
@@ -388,7 +409,7 @@ describe("DynamoDB Client unit tests", function(){
         options.RangeKeyCondition.should.eql({"AttributeValueList":[{"N":"AttributeValue2"}],"ComparisonOperator":"GT"});
         options.Limit.should.equal(13);
         
-        cb();
+        cb(null, {});
       };
 
       client.query("QueryTable", "thiskey",{Limit: 13,RangeKeyCondition: {AttributeValueList:[{"N":"AttributeValue2"}],"ComparisonOperator":"GT"}}, done );
