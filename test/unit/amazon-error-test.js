@@ -43,6 +43,12 @@ describe("Amazon Error Handling", function() {
       err.retry.should.be.true;
     });
 
+    it("should be true for a Throttling exception", function() {
+      var err = new AmazonError({statusCode: 400, type: "com.amazonaws.dynamodb.v20111205#Throttling"});
+
+      err.retry.should.be.true;
+    });
+
     it("should be true for a 500 error", function() {
       var err = new AmazonError({statusCode: 500, type: "com.amazonaws.dynamodb.v20111205#InternalFailureException"});
 
