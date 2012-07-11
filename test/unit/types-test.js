@@ -18,6 +18,12 @@ describe('Types', function() {
       converted.should.eql({"foo":{"N":"123"}});
     });
 
+    it("converts boolean attribute", function() {
+      var converted = Types.stringify({foo : true});
+
+      converted.should.eql({"foo":{"N":"1"}});
+    });
+
     it("converts string array", function() {
       var converted = Types.stringify({foo : ["a", "b", "c"]});
 
