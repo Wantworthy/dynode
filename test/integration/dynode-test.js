@@ -95,7 +95,8 @@ describe('Dynode Integration Tests', function() {
         {id: "updateTest", foo: "baz"}, 
         {id: "update2", nums: [1,2,3], age: 22},
         {id: "update3", foo: "bar", age: 22},
-        {id: "update4", foo: "blah", age: 99, nums : [4,5,6], lname : 'tester'}
+        {id: "update4", foo: "blah", age: 99, nums : [4,5,6], lname : 'tester'},
+        {id: "udpate5", foo: "meow", age: 23 }
       ], done);
     });
 
@@ -129,6 +130,13 @@ describe('Dynode Integration Tests', function() {
         should.not.exist(resp.Attributes.age);
         should.not.exist(resp.Attributes.nums);
         should.not.exist(resp.Attributes.lname);
+        done(err);
+      });
+    });
+
+    it('should update existing item by setting number to 0', function(done) {
+      dynode.updateItem(DynamoDB.TestTable, "update5" {age:0}, {ReturnValues: "UPDATED_NEW"}, function(err, resp) {
+        resp.Attributes.should.eql({ age: 0 });
         done(err);
       });
     });
