@@ -135,7 +135,7 @@ describe('Dynode Integration Tests', function() {
     });
 
     it('should update existing item by setting number to 0', function(done) {
-      dynode.updateItem(DynamoDB.TestTable, "update5" {age:0}, {ReturnValues: "UPDATED_NEW"}, function(err, resp) {
+      dynode.updateItem(DynamoDB.TestTable, "update5", {age:0}, {ReturnValues: "UPDATED_NEW"}, function(err, resp) {
         resp.Attributes.should.eql({ age: 0 });
         done(err);
       });
@@ -194,7 +194,7 @@ describe('Dynode Integration Tests', function() {
   describe("Batch Write Item", function(){
     before(function(done) {
       DynamoDB.createProducts([
-        {id: "batch1", foo: "baz"}, 
+        {id: "batch1", foo: "baz"},
         {id: "batch2", nums: [1,2,3], age: 22},
         {id: "batch3", foo: "bar", age: 22},
         {id: "batch4", foo: "blah", age: 99, nums : [4,5,6], lname : 'tester'}
