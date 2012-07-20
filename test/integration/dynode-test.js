@@ -14,6 +14,7 @@ describe('Dynode Integration Tests', function() {
     it('should list all tables', function(done) {
 
       dynode.listTables({}, function(err, tables) {
+        should.not.exist(err);
         tables.should.have.property("TableNames");
         done();
       });

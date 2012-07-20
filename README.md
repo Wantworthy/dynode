@@ -38,6 +38,31 @@ If you would prefer to manage your own client, potentially with different auth p
     accessKeyId: "AWSAccessKey", secretAccessKey: "SecretAccessKey"
   });
 ```
+
+### Region support
+dynode supports all available DynamoDB regions. By default dynode will connect to the us-east-1 region.
+To connect to a different region pass in the region option when creating a client, for example:
+
+``` js
+  // connect to the US West (Northern California) Region
+  var client = new (dynode.Client)({
+    region: "us-west-1"
+    accessKeyId: "AWSAccessKey", 
+    secretAccessKey: "SecretAccessKey"
+  });
+```
+
+The default client can also connect to any region
+
+``` js
+  // connect to the Asia Pacific (Tokyo) Region
+  dynode.auth({
+    region: "ap-northeast-1"
+    accessKeyId: "AWSAccessKey", 
+    secretAccessKey: "SecretAccessKey"
+  });
+```
+
 ## Callback Signature
 Callbacks return (error, [results], meta) where results are the returned data and meta is the extra information returned by DynamoDB
 
