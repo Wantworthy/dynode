@@ -1,6 +1,10 @@
 # dynode [![Build Status](https://secure.travis-ci.org/Wantworthy/dynode.png)](http://travis-ci.org/Wantworthy/dynode)
 node.js client for working with Amazon's [DynamoDB](http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/Introduction.html?r=5378) service.
 
+## Urgent
+  A bug was discovered generating aws request starting on or over the 10th month of the year. This causes all requests to fail starting on October 1st, more information can be found [here](https://github.com/Wantworthy/dynode/issues/30).
+  Version 0.6.1 has been released fixing this issue. Anyone currently running 0.6.0 should upgrade immediately. 
+  
 ## Installation
 
 ### Installing npm (node package manager)
@@ -12,6 +16,7 @@ node.js client for working with Amazon's [DynamoDB](http://docs.amazonwebservice
 ``` bash 
   $ [sudo] npm install dynode
 ```
+
 ## Motivation
 Dynode is designed to be a simple and easy way to work with Amazon's DynamoDB service. Amazon's http api is complicated and non obvious how to interact with it. This client aims to offer a simplified more obvious way of working with DynamoDB, but without getting in your way or limiting what you can do with DynamoDB.
 
