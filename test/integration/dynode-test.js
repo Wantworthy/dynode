@@ -1,6 +1,7 @@
 var dynode = require("../../lib/dynode"),
     DynamoDB = require('../test-helper'),
     util = require('utile'),
+    awssum = require('awssum'),
     should = require('chai').should();
 
 describe('Dynode Integration Tests', function() {
@@ -276,4 +277,34 @@ describe('Dynode Integration Tests', function() {
     });
   });
 
+  describe("Using IAM Session Token", function() {
+    it("Should list all tables", function(done) {
+      var amazon = awssum.load('amazon/amazon');
+      var Sts = awssum.load('amazon/sts').Sts;
+
+      var sts = new Sts({
+        accessKeyId: process.env.AWS_ACCEESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        region: amazon.US_EAST_1
+      });
+
+      sts.GetSessionToken({DurationSeconds: 900}, function(err, results) {
+        should.not.exist(err);
+        var token = results.Body.GetSessionTokenResponse.GetSessionTokenResult.Credentials.SessionToken;
+
+        dynode.auth({
+          accessKeyId: process.env.AWS_ACCEESS_KEY_ID,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+          token: token
+        });
+
+
+        dynode.listTables({}, function(err, tables) {
+          should.not.exist(err);
+          tables.should.have.property("TableNames");
+          done();
+        });
+      });
+    });
+  });
 });

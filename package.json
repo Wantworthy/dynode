@@ -21,7 +21,8 @@
   },
   "devDependencies": {
     "mocha" : "1.3.x",
-    "chai": "1.1.x"
+    "chai": "1.1.x",
+    "awssum": "0.12.x"
   },
   "scripts": {
     "test"  : "make test"
