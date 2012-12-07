@@ -114,7 +114,7 @@ dynode client takes an optional tableNamePrefix in order to support running in d
 Now all operations will be performed against tables starting with that prefix, for example
 
 ``` js
-  client.createTable("NewTable", console.log); // will create table named 'Dev_NewTable'
+  client.createTable("NewTable", function(err, res) {}); // will create table named 'Dev_NewTable'
 ```
 
 <a name="https"></a>
@@ -133,14 +133,14 @@ The CreateTable operation adds a new table to your account. For more info see [h
 By default `createTable` will create the given table with a primary key of id : String, a read capacity of 10 and write capacity of 5.
 
 ``` js
-  dynode.createTable("ExampleTable", console.log);
+  dynode.createTable("ExampleTable", function(err, res) {});
 ```
 
 `createTable` accepts an options hash to override any of the table creation defaults.
 
 ``` js
   var opts = {read: 20, write: 25, hash: {name: String}, range: {age: Number}};
-  dynode.createTable("ExampleTable", opts, console.log);
+  dynode.createTable("ExampleTable", opts, function(err, res) {});
 ```
 
 <a name="listTables"></a>
@@ -150,13 +150,13 @@ Returns an array of all the tables associated with the current account. For more
 By default `listTables` will list all of your DynamoDB tables.
 
 ``` js
-  dynode.listTables(console.log);
+  dynode.listTables(function(err, res) {});
 ```
 
 You can also pass in options to filter which tables to list. See [Amazon's docs][listTablesDocs] for more info 
 
 ``` js
-  dynode.listTables({Limit: 3, ExclusiveStartTableName: "ExampleTable"}, console.log);
+  dynode.listTables({Limit: 3, ExclusiveStartTableName: "ExampleTable"}, function(err, res) {});
 ```
 
 <a name="describeTable"></a>
@@ -175,7 +175,7 @@ For more info see [here][describeTableDocs]
 Updates the provisioned throughput for the given table. For more info see [here][updateTableDocs]
 
 ``` js
-  dynode.updateTable("ExampleTable", {read: 15, write: 10}, console.log);
+  dynode.updateTable("ExampleTable", {read: 15, write: 10}, function(err, res) {});
 ```
 
 <a name="deleteTable"></a>
@@ -184,7 +184,7 @@ Updates the provisioned throughput for the given table. For more info see [here]
 Deletes a table and all of its items. For more info see [here][deleteTableDocs]
 
 ``` js
-  dynode.deleteTable("ExampleTable", console.log);
+  dynode.deleteTable("ExampleTable", function(err, res) {});
 ```
 
 <a name="putItem"></a>
@@ -192,7 +192,7 @@ Deletes a table and all of its items. For more info see [here][deleteTableDocs]
 Creates a new item, or replaces an old item with a new item (including all the attributes). For more info see [here][putItemDocs]
 
 ``` js
-  dynode.putItem("ExampleTable", {name : "Foo", age: 80, baz : ["a", "b", "c"], nums: [1,2,3]}, console.log);
+  dynode.putItem("ExampleTable", {name : "Foo", age: 80, baz : ["a", "b", "c"], nums: [1,2,3]}, function(err, res) {});
 ```
 
 You can also pass in any option that Amazon accepts.
@@ -201,7 +201,7 @@ You can also pass in any option that Amazon accepts.
   var item = {name : "Bob"};
   var options = {ReturnValues:"ReturnValuesConstant", Expected :{"age":{"Value": {"N":"42"},{"Exists":Boolean}}}};
 
-  dynode.putItem("ExampleTable", item, options, console.log);
+  dynode.putItem("ExampleTable", item, options, function(err, res) {});
 ```
 
 <a name="updateItem"></a>
@@ -211,13 +211,13 @@ Edits an existing item's attributes. For more info see [here][updateItemDocs]
 By default all operations will be a PUT, which will add or replace the attribute with the new value.
 
 ``` js
-  dynode.updateItem("ExampleTable", "ItemHashKey", {name: "Ryan"}, console.log);
+  dynode.updateItem("ExampleTable", "ItemHashKey", {name: "Ryan"}, function(err, res) {});
 ```
 
 `updateItem` also accepts a key object to specify which item to update.
 
 ``` js
-  dynode.updateItem("ExampleTable", {hash: "Key", range: 22}, {name: "Ryan"}, console.log);
+  dynode.updateItem("ExampleTable", {hash: "Key", range: 22}, {name: "Ryan"}, function(err, res) {});
 ```
 
 Perform specific action to perform for the given update
@@ -225,7 +225,7 @@ Perform specific action to perform for the given update
 ``` js
   var updates = {nums: {'delete' : [5]}, age: {add: 2}};
 
-  dynode.updateItem("ExampleTable", "ItemsHashKey", updates, console.log);
+  dynode.updateItem("ExampleTable", "ItemsHashKey", updates, function(err, res) {});
 ```
 
 Delete the attribute from an existing item
@@ -233,7 +233,7 @@ Delete the attribute from an existing item
 ``` js
   var updates = {age: {'Action' : 'DELETE'}};
 
-  dynode.updateItem("ExampleTable", "ItemsHashKey", updates, console.log);
+  dynode.updateItem("ExampleTable", "ItemsHashKey", updates, function(err, res) {});
 ```
 
 DynamoDB doesn't allow empty strings or empty sets
@@ -242,7 +242,7 @@ updateItem will delete attributes when passing in null, empty string, or empty a
 ``` js
   var updates = {age: null, nums: [], fullname: ''};
 
-  dynode.updateItem("ExampleTable", "ItemsHashKey", updates, console.log);
+  dynode.updateItem("ExampleTable", "ItemsHashKey", updates, function(err, res) {});
 ```
 
 `updateItem` accepts options which lets you pass in any option that Amazon accepts.
@@ -250,7 +250,7 @@ updateItem will delete attributes when passing in null, empty string, or empty a
 ``` js
   var opts = {ReturnValues : "ReturnValuesConstant", Expected :{"status":{"Value":{"S":"offline"}}}};
 
-  dynode.updateItem("ExampleTable", "TheKey", {name: "Ryan"}, opts, console.log);
+  dynode.updateItem("ExampleTable", "TheKey", {name: "Ryan"}, opts, function(err, res) {});
 ```
 
 <a name="getItem"></a>
@@ -258,13 +258,13 @@ updateItem will delete attributes when passing in null, empty string, or empty a
 The `getItem` operation returns a set of Attributes for an item that matches the primary key. For more info see [here][getItemDocs]
 
 ``` js
-  dynode.getItem("ExampleTable", "TheHashKey", console.log);
+  dynode.getItem("ExampleTable", "TheHashKey", function(err, res) {};
 ```
 
 `getItem` also accepts a key object to specify which item to get.
 
 ``` js
-  dynode.getItem("ExampleTable", {hash: "TheHashKey", range: 123}, console.log);
+  dynode.getItem("ExampleTable", {hash: "TheHashKey", range: 123}, function(err, res) {});
 ```
 
 `getItem` accepts any option that Amazon accepts.
@@ -272,7 +272,7 @@ The `getItem` operation returns a set of Attributes for an item that matches the
 ``` js
   var opts = {AttributesToGet: ["status","friends"], ConsistentRead : true};
 
-  dynode.getItem("ExampleTable", "TheHashKey", opts, console.log);
+  dynode.getItem("ExampleTable", "TheHashKey", opts, function(err, res) {});
 ```
 
 <a name="deleteItem"></a>
@@ -280,13 +280,13 @@ The `getItem` operation returns a set of Attributes for an item that matches the
 Deletes a single item in a table by primary key. For more info see [here][deleteItemDocs]
 
 ``` js
-  dynode.deleteItem("ExampleTable", "TheHashKey", console.log);
+  dynode.deleteItem("ExampleTable", "TheHashKey", function(err, res) {});
 ```
 
 `deleteItem` also accepts a key object to specify which item to delete.
 
 ``` js
-  dynode.deleteItem("ExampleTable", {hash: "TheHashKey", range: 123}, console.log);
+  dynode.deleteItem("ExampleTable", {hash: "TheHashKey", range: 123}, function(err, res) {});
 ```
 
 `deleteItem` accepts any option that Amazon accepts.
@@ -294,7 +294,7 @@ Deletes a single item in a table by primary key. For more info see [here][delete
 ``` js
   var opts = {ReturnValues : "ALL_OLD"};
 
-  dynode.deleteItem("ExampleTable", "TheHashKey", opts, console.log);
+  dynode.deleteItem("ExampleTable", "TheHashKey", opts, function(err, res) {});
 ```
 
 <a name="query"></a>
@@ -302,7 +302,7 @@ Deletes a single item in a table by primary key. For more info see [here][delete
 A Query operation gets the values of one or more items and their attributes by primary key. For more info see [here][queryDocs]
 
 ``` js
-  dynode.query("ExampleTable", "TheHashKey", console.log);
+  dynode.query("ExampleTable", "TheHashKey", function(err, res) {});
 ```
 
 `query` accepts any option that Amazon accepts.
@@ -310,7 +310,7 @@ A Query operation gets the values of one or more items and their attributes by p
 ``` js
   var opts = {RangeKeyCondition: {AttributeValueList :[{"N":"AttributeValue2"}],"ComparisonOperator":"GT"}};
 
-  dynode.query("ExampleTable", "TheHashKey", opts, console.log);
+  dynode.query("ExampleTable", "TheHashKey", opts, function(err, res) {});
 ```
 
 <a name="scan"></a>
@@ -318,7 +318,7 @@ A Query operation gets the values of one or more items and their attributes by p
 The Scan operation returns one or more items and its attributes by performing a full scan of a table. For more info see [here][scanDocs]
 
 ``` js
-  dynode.scan("ExampleTable", console.log);
+  dynode.scan("ExampleTable", function(err, items, res) {});
 ```
 
 `scan` accepts any option that Amazon accepts.
@@ -330,7 +330,26 @@ The Scan operation returns one or more items and its attributes by performing a 
     AttributesToGet : ["AttributeName1", "AttributeName2", "AttributeName3"]
   };
 
-  dynode.scan("ExampleTable", opts, console.log);
+  dynode.scan("ExampleTable", opts, function(err, items, res) {});
+```
+In a single query, you can scan only 1M, if more data will return the key. To get this key you can like below.
+
+``` js
+    var opts = {
+      "ExclusiveStartKey":
+        {
+          "HashKeyElement":{"N":"id"}
+        }
+    }
+    dynode.scan("ExampleTable", opts, function(err, items, res) {
+      if(err) {
+        console.log(err);
+        return false;
+      }
+      if(typeof res.LastEvaluatedKey !== "undefined") {
+        console.log(res.LastEvaluatedKey);
+      }
+    });
 ```
 
 <a name="batchGetItem"></a>
@@ -343,7 +362,7 @@ The BatchGetItem operation returns the attributes for multiple items from multip
     "AnotherTable": {keys:[{hash: "anotherKey", range: 123}]}
   }
 
-  dynode.batchGetItem(query, console.log);
+  dynode.batchGetItem(query, function(err, res) {});
 ```
 
 `batchGetItem` accepts any option that Amazon accepts.
@@ -354,7 +373,7 @@ The BatchGetItem operation returns the attributes for multiple items from multip
     "AnotherTable": {keys:[{hash: "anotherKey", range: 123}], AttributesToGet :["brand", "price"]}
   }
 
-  dynode.batchGetItem(filter, console.log);
+  dynode.batchGetItem(filter, function(err, res) {});
 ```
 
 <a name="batchWriteItem"></a>
@@ -373,7 +392,7 @@ The BatchWriteItem operation This operation enables you to put or delete several
     ]
   };
 
-  dynode.batchWriteItem(writes, console.log);
+  dynode.batchWriteItem(writes, function(err, res) {});
 ```
 
 <a name="truncate"></a>
@@ -387,7 +406,7 @@ note - This api is not provided directly by DynamoDB.
     throughputPercent : 0.5 // attempt to only consume 50% of write capacity, defaults to 100%
   };
 
-  dynode.truncate("ExampleTable", options, console.log);
+  dynode.truncate("ExampleTable", options, function(err, res) {});
 ```
 
 ## Tests
