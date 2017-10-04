@@ -400,7 +400,7 @@ All tests are written with [mocha][0] and should be run with make:
 #### Author: [Ryan Fitzgerald](http://twitter.com/#!/TheRyanFitz)
 #### License: [Apache 2.0][1]
 
-[0]: http://visionmedia.github.com/mocha/
+[0]: http://mochajs.org/
 [1]: http://www.apache.org/licenses/LICENSE-2.0
 [createTablesDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_CreateTable.html
 [listTablesDocs]: http://docs.amazonwebservices.com/amazondynamodb/latest/developerguide/API_ListTables.html
